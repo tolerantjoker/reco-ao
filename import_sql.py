@@ -42,7 +42,7 @@ for profile in profiles:
 import oursql
 conn = oursql.connect(host='localhost', user='root', passwd='', db='test')
 query = '''INSERT INTO companies (id, name, url) VALUES(?,?,?)'''
-query2 = '''INSERT INTO assignments (company, announce) VALUES(?,?)'''
+query2 = '''INSERT INTO assignments (coclientannounce) VALUES(?,?)'''
 with conn.cursor(oursql.DictCursor) as cursor:
     cursor.executemany(query, profiles_params)
     cursor.executemany(query2, assignments)
