@@ -1,27 +1,41 @@
-#-*- coding: UTF-8 -*-
+# -*- coding: UTF-8 -*-
 '''
 Created on 19 mars 2014
 
 @author: tolerantjoker
 '''
 import oursql
-import db_config
+from db_config import db_config
+from MySQLdb.cursors import DictCursor
 
 class DB_entity(object):
     '''
     classdocs
     '''
-
-    def __init__(self):
-        '''
-        Constructor
-        '''
-        self.conn = oursql.connect(host='localhost', user='root', passwd='', db='test')
-
-    def getClientList(self):
-        with self.conn.cursor() as cursor:
-            query = "SELECT * FROM companies"
-            cursor.execute(query)
-            return cursor.fetchall()
+    class __Singleton:
+        def __init__(self):
+            self.conn = oursql.connect(host=db_config['host'], user=db_config['user'],
+                                       passwd=db_config['password'], db=db_config['db'])
+            self.val = None
+        def __str__(self):
+            return `self`
+        def getClientList(self):
+            with self.conn.cursor(oursql.DictCursor) as cursor:
+                query = "SELECT * FROM companies"
+                cursor.execute(query)
+                return cursor.fetchall()
+        
+    instance = None
     
+    def __new__(cls):
+        if DB_entity.instance is None:
+            DB_entity.instance = DB_entity.__Singleton()
+        return DB_entity.instance
+
+    def __getattr__(self, attr):
+        return getattr(self.instance, attr)
+  
+    def __setattr__(self, attr, val):
+        return setattr(self.instance, attr, val)
+
             
