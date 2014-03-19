@@ -25,7 +25,6 @@ class Client(object):
         with self.dbentity.conn.cursor() as cursor:
             query ='''SELECT announce FROM assignments WHERE company = ?'''
             params = (self.id,)
-            print(params)
             cursor.execute(query, params)
             return cursor.fetchall()
         

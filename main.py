@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 '''
 Created on 19 mars 2014
 
@@ -9,12 +10,13 @@ import client
 if __name__ == '__main__':
     db = db_entity.DB_entity()
     
-    # Création d'une liste de clients
+    # CrÃ©ation d'une liste de clients
     client_list = db.getClientList()
+    print(client_list)
     clients = []
     for t in client_list:
-        c = client.Client(t[0], t[1], t[2])
+        c = client.Client(t['id'], t['name'], t['url'])
         clients.append(c)
-    # Récupération des données de chaque client
-    for c in clients:
-        print(c.get_historic())
+    # RÃ©cupÃ©ration des donnÃ©es de chaque client    
+    historic = [(c.id, c.get_historic()) for c in clients]
+    print(historic)
