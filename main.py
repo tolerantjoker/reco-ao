@@ -4,10 +4,10 @@ Created on 19 mars 2014
 
 @author: tolerantjoker
 '''
-import db_entity
 import client
-
+import db_entity
 from preprocessor import Preprocessor
+
 
 if __name__ == '__main__':
     db = db_entity.DB_entity()
@@ -39,18 +39,20 @@ if __name__ == '__main__':
     
     html = [a['description'] for a in announce_list]
     print(html)
+    raw = Preprocessor.clean_raw(Preprocessor.clean_html(html[0]))
+    print(raw)
     from sklearn.feature_extraction.text import CountVectorizer
     vec = CountVectorizer(tokenizer=Preprocessor())
     print(vec)
     data = vec.fit_transform(html).toarray()
     print(data)
-     
+      
     vocab = vec.get_feature_names()
     print(len(vocab))
     import numpy as np
     np.clip(data, 0, 1, out=data)
     dist = np.sum(data, axis=0)
     print(dist)
-     
+      
     for tag, count in zip(vocab, dist):
         print(count, tag)

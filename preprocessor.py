@@ -5,12 +5,14 @@ Created on 20 mars 2014
 @author: tolerantjoker
 '''
 
-from bs4 import BeautifulSoup
+import re
+
 import nltk
-from nltk.tokenize import WordPunctTokenizer
+import string
 from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
-import re
+from nltk.tokenize import WordPunctTokenizer
+
 
 class Preprocessor(object):
     '''
@@ -26,7 +28,7 @@ class Preprocessor(object):
         
     @staticmethod
     def clean_html(html):
-        #return BeautifulSoup(html).getText()
+        # return BeautifulSoup(html).getText()
         return nltk.clean_html(html)
     
     @staticmethod
@@ -40,14 +42,20 @@ class Preprocessor(object):
         |\w' --> les contractions d', l', etc.
         |[^\w\s] --> les ponctuations 
         '''
-        return re.sub(r'''(?x)
+        punct = ''.join([p for p in string.punctuation])
+        reg_words = r'''(?x)
         ([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})
         |(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?
         |\d+
         |\w'
-        |[^\w\s]
-        ''', r'', raw)
-        
+        |\.\.\.
+        |[!"#$%&\'()*+,./:;<=>?@[\]\\^_`{|}~-]
+        '''
+        #|[,.;:?!"'%&()\[\]*\/\\=+-]
+#         reg_words += u"| ^\w\s\u2019"
+        raw = re.sub(reg_words, r'', raw)
+        return raw
+    
     @staticmethod
     def tokenize(raw):
         tokenizer = WordPunctTokenizer()
@@ -62,5 +70,5 @@ class Preprocessor(object):
     def normalize(tokens):
         stemmer = SnowballStemmer('french')
         return list(set([stemmer.stem(w.lower()) for w in tokens]))
-        #return list(set([w.lower() for w in tokens]))
+        # return list(set([w.lower() for w in tokens]))
     

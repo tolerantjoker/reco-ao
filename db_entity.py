@@ -28,7 +28,7 @@ class DB_entity(object):
         
         def getAnnounceList(self):
             with self.conn.cursor(oursql.DictCursor) as cursor:
-                query = '''SELECT * FROM announces LIMIT 0,10'''
+                query = '''SELECT * FROM announces LIMIT 0,50'''
                 cursor.execute(query)
                 return cursor.fetchall()
     # Instance propre au pattern singleton    
