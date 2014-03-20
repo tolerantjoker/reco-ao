@@ -6,7 +6,6 @@ Created on 19 mars 2014
 '''
 import oursql
 from db_config import db_config
-from MySQLdb.cursors import DictCursor
 
 class DB_entity(object):
     '''
@@ -31,7 +30,19 @@ class DB_entity(object):
                 query = '''SELECT * FROM announces LIMIT 0,50'''
                 cursor.execute(query)
                 return cursor.fetchall()
-    # Instance propre au pattern singleton    
+        
+        def getAnnounceAttributed(self):
+            with self.conn.cursor(oursql.DictCursor) as cursor:
+                query = '''SELECT * FROM announces WHERE id IN (SELECT id FROM assignments)'''
+                cursor.execute(query)
+                return cursor.fetchall()
+            
+        def getAnnounceUnattributed(self):
+            with self.conn.cursor(oursql.DictCursor) as cursor:
+                query = '''SELECT * FROM announces WHERE id NOT IN (SELECT id FROM assignments)'''
+                cursor.execute(query)
+                return cursor.fetchall()
+    # Instance propre au pattern singleton
     instance = None
     
     def __new__(cls):
