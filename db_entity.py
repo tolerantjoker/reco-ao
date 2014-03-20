@@ -16,15 +16,22 @@ class DB_entity(object):
         def __init__(self):
             self.conn = oursql.connect(host=db_config['host'], user=db_config['user'],
                                        passwd=db_config['password'], db=db_config['db'])
-            self.val = None
+            
         def __str__(self):
             return `self`
+        
         def getClientList(self):
             with self.conn.cursor(oursql.DictCursor) as cursor:
-                query = "SELECT * FROM companies"
+                query = '''SELECT * FROM companies'''
                 cursor.execute(query)
                 return cursor.fetchall()
         
+        def getAnnounceList(self):
+            with self.conn.cursor(oursql.DictCursor) as cursor:
+                query = '''SELECT * FROM announces LIMIT 0,10'''
+                cursor.execute(query)
+                return cursor.fetchall()
+    # Instance propre au pattern singleton    
     instance = None
     
     def __new__(cls):
