@@ -40,7 +40,7 @@ class Preprocessor(object):
         |(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/? --> url
         |\d+ --> valeur numérique
         |\w' --> les contractions d', l', etc.
-        |[^\w\s] --> les ponctuations 
+        |[!"#$%&\'()*+,./:;<=>?@[\]\\^_`{|}~-] --> les ponctuations 
         '''
         punct = ''.join([p for p in string.punctuation])
         reg_words = r'''(?x)
