@@ -27,19 +27,19 @@ class DB_entity(object):
         
         def getAnnounceList(self):
             with self.conn.cursor(oursql.DictCursor) as cursor:
-                query = '''SELECT * FROM announces LIMIT 0,200'''
+                query = '''SELECT * FROM announces  LIMIT 0,1000'''
                 cursor.execute(query)
                 return cursor.fetchall()
         
         def getAnnounceAttributed(self):
             with self.conn.cursor(oursql.DictCursor) as cursor:
-                query = '''SELECT * FROM announces WHERE id IN (SELECT announce FROM assignments) LIMIT 0,200'''
+                query = '''SELECT * FROM announces WHERE id IN (SELECT announce FROM assignments) LIMIT 0,1000'''
                 cursor.execute(query)
                 return cursor.fetchall()
             
         def getAnnounceUnattributed(self):
             with self.conn.cursor(oursql.DictCursor) as cursor:
-                query = '''SELECT * FROM announces WHERE id NOT IN (SELECT announce FROM assignments) LIMIT 0,200'''
+                query = '''SELECT * FROM announces WHERE id NOT IN (SELECT announce FROM assignments) LIMIT 0,1000'''
                 cursor.execute(query)
                 return cursor.fetchall()
     # Instance propre au pattern singleton

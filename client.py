@@ -4,16 +4,17 @@ Created on 19 mars 2014
 
 @author: tolerantjoker
 '''
-import numpy as np
-from scipy import sparse
-from sklearn.metrics.pairwise import cosine_similarity
 
-import db_entity
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn import decomposition
-import reco_system
 from preprocessor import Preprocessor
+from scipy import sparse
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import HashingVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import db_entity
+import numpy as np
 import oursql
+import reco_system
+from main import reco_system
 
 class Client(object):
     '''
@@ -34,11 +35,19 @@ class Client(object):
         self.client_tags = None
         self.client_topics = None
         
-        self.vec = TfidfVectorizer(tokenizer=Preprocessor(),
-                              max_features=self.reco_sys.n_feature,
-                              vocabulary=self.reco_sys.vec.vocabulary_.keys())
-    
+#         self.vec = TfidfVectorizer(tokenizer=Preprocessor(),
+#                               max_features=self.reco_sys.n_feature,
+#                               vocabulary=self.reco_sys.vec.vocabulary_.keys())
+        #self.vec = TfidfVectorizer(tokenizer=Preprocessor(), max_features=self.n_feature)
+#         self.vec = HashingVectorizer(tokenizer=Preprocessor(),
+#                                      vocabulary=self.reco_sys.vec.vocabulary_.keys(),
+#                                      non_negative=True)
+        self.vec = self.reco_sys.vec
+        
     def get_historic(self):
+        '''
+        Retourne la liste des appels d'offres qui ont été attribués au client.
+        '''
         with self.dbentity.conn.cursor(oursql.DictCursor) as cursor:
             query = '''
             SELECT assignments.announce, announces.description
@@ -54,11 +63,18 @@ class Client(object):
             return self.historic
         
     def get_tags(self):
+        '''
+        Renvoie le modèle 'bag-of-words' d'un client.
+        Ce modèle est construit à partir de l'historique des appels d'offres du client.
+        '''
         historic = [e['description'] for e in self.historic]
         self.client_tags = self.vec.fit_transform(historic)
         return self.client_tags.toarray()
     
     def get_topics(self):
+        '''
+        Renvoie les affinités du client avec chaque topic
+        '''
         # self.client_topics = decomposition.NMF(n_components=self.reco_sys.n_components).fit(self.client_tags)
         self.client_topics = cosine_similarity(self.client_tags,
                                                sparse.csr_matrix(np.array(self.reco_sys.tags_topics.components_)))
