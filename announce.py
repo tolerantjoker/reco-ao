@@ -7,7 +7,6 @@ Created on 23 mars 2014
 
 from preprocessor import Preprocessor
 from scipy import sparse
-from sklearn import decomposition
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import HashingVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -31,13 +30,13 @@ class Announce(object):
         self.item_tags = None
         self.item_topics = None
         
-#         self.vec = TfidfVectorizer(tokenizer=Preprocessor(),
-#                               max_features=self.reco_sys.n_feature,
-#                               vocabulary=self.reco_sys.vec.vocabulary_.keys())
+        self.vec = TfidfVectorizer(tokenizer=Preprocessor(),
+                              max_features=self.reco_sys.n_feature,
+                              vocabulary=self.reco_sys.vec.vocabulary_.keys())
 #         self.vec = HashingVectorizer(tokenizer=Preprocessor(),
 #                             vocabulary=self.reco_sys.vec.vocabulary_.keys(),
 #                             non_negative=True)
-        self.vec = self.reco_sys.vec
+#         self.vec = self.reco_sys.vec
         
     def get_tags(self):
         '''
