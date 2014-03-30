@@ -7,8 +7,6 @@ Created on 19 mars 2014
 import announce
 import db_entity
 import reco_system
-import client
-from sklearn import decomposition
 
 if __name__ == '__main__':
     db = db_entity.DB_entity()
@@ -29,11 +27,13 @@ if __name__ == '__main__':
     
     # Recommandation d'un appel d'offre à un client
     print("Recommandation d'un appel d'offre à un client")
-    #an_item = reco_sys.test_set[1]
-    for an_item in reco_sys.test_set:
-        # print(an_item)
-        an_item = announce.Announce(an_item)
-        # print(announce)
-        item, item_clients = reco_sys.get_item_clients(an_item)
-        print(item.id)
-        print(item_clients)
+#     # an_item = reco_sys.test_set[1]
+#     for an_item in reco_sys.test_set:
+#         # print(an_item)
+#         an_item = announce.Announce(an_item)
+#         # print(announce)
+#         item, item_clients = reco_sys.get_item_clients(an_item)
+#         print(item.id)
+#         print(item_clients)
+
+    df = reco_sys.get_reco_df()

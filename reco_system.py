@@ -5,8 +5,10 @@ Created on 20 mars 2014
 @author: tolerantjoker
 '''
 import client
+import announce
 import db_entity
 import numpy as np
+import pandas as pd
 from sklearn import cross_validation
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import HashingVectorizer
@@ -89,7 +91,7 @@ class RecoSystem(object):
             else:
                 self.get_items_tags()
                 self.tags_topics = self.nmf_object.fit_transform(self.items_tags)
-                #self.tags_topics.components_ =  (1.0 / 50.0) * np.asarray(self.tags_topics.components_)
+                # self.tags_topics.components_ =  (1.0 / 50.0) * np.asarray(self.tags_topics.components_)
                 joblib.dump(self.nmf_object, config.NMF_OBJECT)
                 joblib.dump(self.tags_topics, config.TAGS_TOPICS)
         
@@ -129,7 +131,34 @@ class RecoSystem(object):
 #             item_clients = chi2_kernel(item_topics, clients_topics)
             item_clients = cosine_similarity(item_topics, clients_topics)
             return item, item_clients
-                     
+        
+        def get_reco_df(self):
+            '''
+            Renvoit un pandas.DataFrame de la forme
+                    ao1 ao2 ao3 ao4 ao5
+            client1  x   x   x   x   x
+            client2  x   x   x   x   x
+            client3  x   x   x   x   x
+            client4  x   x   x   x   x
+            '''
+            d = {}
+            
+            if self.client_list is None:
+                self.client_list = []
+                r = self.db.getClientList()
+                for t in r:
+                    self.client_list.append(client.Client(t))
+                
+            index = [c.id for c in self.client_list]
+            
+            for t in self.test_set[:20]:
+                ao = announce.Announce(t)
+                item, item_clients = self.get_item_clients(ao)
+                d[item.id] = item_clients.tolist()
+            
+            df = pd.DataFrame(d, index=index)
+            return df
+            
     
     instance = None
     def __new__(cls):
