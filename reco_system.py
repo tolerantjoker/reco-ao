@@ -83,12 +83,14 @@ class RecoSystem(object):
             '''
             Génère la matrice tags-topics à partir de la matrice items_tags
             '''
-            if(os.path.isfile(config.TAGS_TOPICS)):
+            if(os.path.isfile(config.NMF_OBJECT) and os.path.isfile(config.TAGS_TOPICS)):
+                self.nmf_object = joblib.load(config.NMF_OBJECT)
                 self.tags_topics = joblib.load(config.TAGS_TOPICS)
             else:
                 self.get_items_tags()
                 self.tags_topics = self.nmf_object.fit_transform(self.items_tags)
                 #self.tags_topics.components_ =  (1.0 / 50.0) * np.asarray(self.tags_topics.components_)
+                joblib.dump(self.nmf_object, config.NMF_OBJECT)
                 joblib.dump(self.tags_topics, config.TAGS_TOPICS)
         
         def get_clients_topics(self):
