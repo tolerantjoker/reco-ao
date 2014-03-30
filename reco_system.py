@@ -50,6 +50,9 @@ class RecoSystem(object):
 #                 self.vec = HashingVectorizer(tokenizer=Preprocessor(),
 #                                              n_features=self.n_feature,
 #                                              non_negative=True)
+
+            self.nmf_object = decomposition.NMF(n_components=self.n_components)
+
             self.items_tags = None
             self.tags_topics = None
             self.clients_topics = None
@@ -84,7 +87,7 @@ class RecoSystem(object):
                 self.tags_topics = joblib.load(config.TAGS_TOPICS)
             else:
                 self.get_items_tags()
-                self.tags_topics = decomposition.NMF(n_components=self.n_components).fit(self.items_tags)
+                self.tags_topics = self.nmf_object.fit_transform(self.items_tags)
                 #self.tags_topics.components_ =  (1.0 / 50.0) * np.asarray(self.tags_topics.components_)
                 joblib.dump(self.tags_topics, config.TAGS_TOPICS)
         
@@ -114,15 +117,15 @@ class RecoSystem(object):
             Génère les affinités des clients vis à vis d'un appel d'offre entrant
             '''
             item.get_tags()
-#             item_topics = sparse.csr_matrix(np.array(item.get_topics()))
-            item_topics = item.get_topics()
+            item_topics = sparse.csr_matrix(np.array(item.get_topics()))
+#             item_topics = item.get_topics()
 
             self.get_clients_topics()
-#             clients_topics = sparse.csr_matrix(np.array(self.clients_topics))
-            clients_topics = self.clients_topics
+            clients_topics = sparse.csr_matrix(np.array(self.clients_topics))
+#             clients_topics = self.clients_topics
             
-            item_clients = chi2_kernel(item_topics, clients_topics)
-            #item_clients = cosine_similarity(item_topics, clients_topics)
+#             item_clients = chi2_kernel(item_topics, clients_topics)
+            item_clients = cosine_similarity(item_topics, clients_topics)
             return item, item_clients
                      
     
