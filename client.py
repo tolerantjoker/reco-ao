@@ -36,13 +36,13 @@ class Client(object):
         self.client_tags = None
         self.client_topics = None
         
-        self.vec = TfidfVectorizer(tokenizer=Preprocessor(),
-                              max_features=self.reco_sys.n_feature,
-                              vocabulary=self.reco_sys.vec.vocabulary_.keys())
+#         self.vec = TfidfVectorizer(tokenizer=Preprocessor(),
+#                               max_features=self.reco_sys.n_feature,
+#                               vocabulary=self.reco_sys.vec.vocabulary_.keys())
 #         self.vec = HashingVectorizer(tokenizer=Preprocessor(),
 #                                      vocabulary=self.reco_sys.vec.vocabulary_.keys(),
 #                                      non_negative=True)
-#         self.vec = self.reco_sys.vec
+        self.vec = self.reco_sys.vec
         
     def get_historic(self):
         '''
@@ -69,7 +69,7 @@ class Client(object):
         '''
         self.get_historic()
         historic = [e['description'] for e in self.historic]
-        self.client_tags = self.vec.fit_transform(historic)
+        self.client_tags = self.vec.transform(historic)
     
     def get_topics(self):
         '''
@@ -77,7 +77,9 @@ class Client(object):
         '''
         # self.client_topics = decomposition.NMF(n_components=self.reco_sys.n_components).fit(self.client_tags)
         self.get_tags()
-        self.client_topics = cosine_similarity(self.client_tags,
-                                               sparse.csr_matrix(np.array(self.reco_sys.tags_topics.components_)))
+        self.client_topics = self.reco_sys.nmf_object.transform(self.client_tags)
         self.client_topics = np.mean(np.asarray(self.client_topics), axis=0)
+#         self.client_topics = cosine_similarity(self.client_tags,
+#                                                sparse.csr_matrix(np.array(self.reco_sys.tags_topics.components_)))
+#         self.client_topics = np.mean(np.asarray(self.client_topics), axis=0)
         return self.client_topics
