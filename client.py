@@ -45,7 +45,7 @@ class Client(object):
 #                                      non_negative=True)
         self.vec = self.reco_sys.vec
         
-        self.reco_list = None
+        self.reco_series = None
         
     def get_historic(self):
         '''
@@ -78,17 +78,19 @@ class Client(object):
         '''
         Renvoie les affinités du client avec chaque topic
         '''
-        # self.client_topics = decomposition.NMF(n_components=self.reco_sys.n_components).fit(self.client_tags)
         self.get_tags()
         self.client_topics = self.reco_sys.nmf_object.transform(self.client_tags)
 #         self.client_topics = cosine_similarity(self.client_tags,
 #                                                sparse.csr_matrix(np.array(self.reco_sys.tags_topics.components_)))
-#         self.client_topics = np.mean(np.asarray(self.client_topics), axis=0)
+        self.client_topics = np.mean(np.asarray(self.client_topics), axis=0)
         return self.client_topics
 
-    def get_reco_list(self):
+    def get_reco_series(self):
         '''
         Renvoie la liste des appels d'offres recommandés au client
         '''
-        reco_df = self.reco_sys.get_reco_df()
-        self.reco_list = reco_df.loc[self.id]
+        self.reco_sys.get_reco_df()
+        reco_df = self.reco_sys.reco_df
+        self.reco_series = reco_df.loc[self.id]
+        self.reco_series = self.reco_series.order(ascending=False)
+    

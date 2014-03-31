@@ -4,7 +4,7 @@ Created on 19 mars 2014
 
 @author: tolerantjoker
 '''
-import announce
+import client
 import db_entity
 import reco_system
 
@@ -22,7 +22,8 @@ if __name__ == '__main__':
     # print(reco_sys.tags_topics.components_)
 
 #     reco_sys.get_clients_topics()
-#     print(reco_sys.clients_topics)
+#     print(len(reco_sys.clients_topics))
+#     print(len(reco_sys.clients_topics[0]))
     
     
     # Recommandation d'un appel d'offre à un client
@@ -35,5 +36,17 @@ if __name__ == '__main__':
 #         item, item_clients = reco_sys.get_item_clients(an_item)
 #         print(item.id)
 #         print(item_clients)
+    reco_sys.get_clients_topics()
+#     print(len(reco_sys.clients_topics))
+#     print(reco_sys.clients_topics)
 
+    params = {"id":1245, "name":"company", "url":"http://perdu.com"}
+    c = client.Client(params)
+     
     df = reco_sys.get_reco_df()
+#     print(df[2525988])
+    print(df)
+#     print(df.loc[c.id])
+    
+    c.get_reco_series()
+    print(c.reco_series)
