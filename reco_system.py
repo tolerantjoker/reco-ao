@@ -58,6 +58,7 @@ class RecoSystem(object):
             self.items_tags = None
             self.tags_topics = None
             self.clients_topics = None
+            self.reco_df = None
         
         def split_train_test(self):
             if os.path.isfile(config.TRAIN_SET) and os.path.isfile(config.TEST_SET):
@@ -108,10 +109,10 @@ class RecoSystem(object):
                     self.client_list.append(client.Client(t))
                 
                 self.clients_topics = []
-                for a_client in self.client_list[:-1]:
+                for a_client in self.client_list:
 #                     historic = a_client.get_historic()
 #                     client_tags = a_client.get_tags()
-                    client_topics = a_client.get_topics()            
+                    client_topics = a_client.get_topics()
                     self.clients_topics.append(client_topics)
                 
                 joblib.dump(self.clients_topics, config.CLIENTS_TOPICS)
@@ -141,25 +142,29 @@ class RecoSystem(object):
             client3  x   x   x   x   x
             client4  x   x   x   x   x
             '''
-            d = {}
-            
-            if self.client_list is None:
-                self.client_list = []
-                r = self.db.getClientList()
-                for t in r:
-                    self.client_list.append(client.Client(t))
+            if os.path.isfile(config.RECO_DF):
+                self.reco_df = joblib.load(config.RECO_DF)
+            else:
+                d = {}
                 
-            index = [c.id for c in self.client_list]
+                if self.client_list is None:
+                    self.client_list = []
+                    r = self.db.getClientList()
+                    for t in r:
+                        self.client_list.append(client.Client(t))
+                    
+                index = [c.id for c in self.client_list]
+                
+                for t in self.test_set[:10]:
+                    ao = announce.Announce(t)
+                    item, item_clients = self.get_item_clients(ao)
+                    d[item.id] = item_clients.tolist()[0]
+                
+                self.reco_df = pd.DataFrame(d, index=index)
+                joblib.dump(self.reco_df, config.RECO_DF)
             
-            for t in self.test_set[:20]:
-                ao = announce.Announce(t)
-                item, item_clients = self.get_item_clients(ao)
-                d[item.id] = item_clients.tolist()
-            
-            df = pd.DataFrame(d, index=index)
-            return df
-            
-    
+            return self.reco_df
+
     instance = None
     def __new__(cls):
         if RecoSystem.instance is None:
