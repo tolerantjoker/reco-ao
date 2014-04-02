@@ -5,18 +5,12 @@ Created on 19 mars 2014
 @author: tolerantjoker
 '''
 
-from preprocessor import Preprocessor
-from scipy import sparse
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.feature_extraction.text import HashingVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.metrics.pairwise import chi2_kernel
+import oursql
+
 import db_entity
 import numpy as np
-import oursql
 import reco_system
-from sklearn import decomposition
-import pandas as pd
+
 
 class Client(object):
     '''
@@ -46,6 +40,9 @@ class Client(object):
         self.vec = self.reco_sys.vec
         
         self.reco_series = None
+        
+    def __str__(self):
+        return str(self.id) + '\n' + self.name + '\n' + self.url + '\n'
         
     def get_historic(self):
         '''
@@ -87,10 +84,57 @@ class Client(object):
 
     def get_reco_series(self):
         '''
-        Renvoie la liste des appels d'offres recommandés au client
+        Renvoie la liste des appels d'offres recommandés au client,
+        avec pour chaque appel d'offres sa note associé.
         '''
         self.reco_sys.get_reco_df()
         reco_df = self.reco_sys.reco_df
         self.reco_series = reco_df.loc[self.id]
+        self.reco_series = self.reco_series[self.reco_series > self.reco_sys.THRESHOLD]
         self.reco_series = self.reco_series.order(ascending=False)
+    
+    def get_reco_list(self):
+        '''
+        Renvoie la liste des identifiants des appels d'offres recommandés au client par le RecoSystem.
+        '''
+        if self.reco_series is None:
+            self.get_reco_series()
+        return self.reco_series.index.tolist()
+    
+    def get_list_jurismarches(self):
+        def get_hist_set_ids():
+            with self.dbentity.conn.cursor() as cursor:
+                query = '''
+                        SELECT announce
+                        FROM assignments
+                        WHERE assignments.company = ?
+                        '''
+                params = (self.id,)
+                cursor.execute(query, params)
+                res = cursor.fetchall()
+                res = reduce(list.__add__, map(list, res))
+            return set(res)
+        def get_test_set_ids():
+            return set([a['id'] for a in self.reco_sys.test_set])
+        
+        return list(get_hist_set_ids() & get_test_set_ids())
+    
+    def tp(self):
+        return list(set(self.get_list_jurismarches()) & set(self.get_reco_list()))
+    
+    def fp(self):
+        return list(set(self.get_reco_list()) - set(self.get_list_jurismarches()))
+    
+    def fn(self):
+        return list(set(self.get_list_jurismarches()) - set(self.get_reco_list()))
+    
+    def precision_recall(self):
+        tp = float(len(self.tp()))
+        fp = float(len(self.fp()))
+        fn = float(len(self.fn()))
+        try:
+            return tp / (tp + fp), tp / (tp + fn)
+        except ZeroDivisionError:
+            return 0.0, 0.0
+    
     
