@@ -4,32 +4,35 @@ Created on 20 mars 2014
 
 @author: tolerantjoker
 '''
-import client
+import os.path
+
+from scipy import sparse
+from sklearn import cross_validation, decomposition
+from sklearn.externals import joblib
+from sklearn.feature_extraction.text import HashingVectorizer, TfidfVectorizer
+from sklearn.metrics.pairwise import chi2_kernel, cosine_similarity
+
 import announce
+import client
+import config
 import db_entity
 import numpy as np
 import pandas as pd
-from sklearn import cross_validation
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.feature_extraction.text import HashingVectorizer
 from preprocessor import Preprocessor
-from sklearn import decomposition
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.metrics.pairwise import chi2_kernel
-from scipy import sparse
-from sklearn.externals import joblib
-import os.path
-import config
+
 
 class RecoSystem(object):
     '''
     classdocs
     '''
     class __Singleton:
+        
         def __init__(self):
             '''
             Constructor
             '''
+            self.THRESHOLD = 0.7  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
+            
             self.db = db_entity.DB_entity()
             
             self.n_feature = 500
@@ -155,7 +158,7 @@ class RecoSystem(object):
                     
                 index = [c.id for c in self.client_list]
                 
-                for t in self.test_set[:10]:
+                for t in self.test_set:
                     ao = announce.Announce(t)
                     item, item_clients = self.get_item_clients(ao)
                     d[item.id] = item_clients.tolist()[0]
@@ -164,6 +167,25 @@ class RecoSystem(object):
                 joblib.dump(self.reco_df, config.RECO_DF)
             
             return self.reco_df
+        
+        def precision_recall(self):
+            '''
+            Renvoie la précision moyenne du système.
+            '''
+            precisions, recalls = [], []
+            client_list = self.db.getClientList()
+            clients = []
+            for d in client_list:
+                clients.append(client.Client(params=d))
+                
+            for c in clients:
+                c.get_reco_list()
+                precision, recall = c.precision_recall()
+                precisions.append(precision)
+                recalls.append(recall)
+
+            return np.mean(precisions), np.mean(recalls)
+
 
     instance = None
     def __new__(cls):
