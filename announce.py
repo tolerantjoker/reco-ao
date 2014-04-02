@@ -5,15 +5,7 @@ Created on 23 mars 2014
 @author: tolerantjoker
 '''
 
-from scipy import sparse
-from sklearn import decomposition
-from sklearn.feature_extraction.text import HashingVectorizer, TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-
-import numpy as np
-from preprocessor import Preprocessor
 import reco_system
-
 
 class Announce(object):
     '''
