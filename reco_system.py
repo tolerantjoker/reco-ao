@@ -9,8 +9,8 @@ import os.path
 from scipy import sparse
 from sklearn import cross_validation, decomposition
 from sklearn.externals import joblib
-from sklearn.feature_extraction.text import HashingVectorizer, TfidfVectorizer
-from sklearn.metrics.pairwise import chi2_kernel, cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 import announce
 import client
@@ -19,6 +19,8 @@ import db_entity
 import numpy as np
 import pandas as pd
 from preprocessor import Preprocessor
+import sklearn.metrics
+import pylab as pl
 
 
 class RecoSystem(object):
@@ -31,7 +33,7 @@ class RecoSystem(object):
             '''
             Constructor
             '''
-            self.THRESHOLD = 0.7  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
+            self.THRESHOLD = 0.72  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
             
             self.db = db_entity.DB_entity()
             
@@ -70,8 +72,13 @@ class RecoSystem(object):
             else:
                 self.attributed_announce_list = self.db.getAnnounceAttributed()
                 self.unattributed_announce_list = self.db.getAnnounceAttributed()
-                self.announce_list = self.attributed_announce_list + self.unattributed_announce_list
-                self.train_set, self.test_set = cross_validation.train_test_split(self.announce_list)
+                #self.announce_list = self.attributed_announce_list + self.unattributed_announce_list
+                #self.train_set, self.test_set = cross_validation.train_test_split(self.announce_list)
+                self.train_set, self.test_set = cross_validation.train_test_split(self.attributed_announce_list)
+                self.test_set = self.test_set.tolist()
+                self.test_set.extend(self.unattributed_announce_list)
+                self.test_set = np.array(self.test_set)
+                
                 # Sauvegarde du train set et du test set
                 joblib.dump(self.train_set, config.TRAIN_SET)
                 joblib.dump(self.test_set, config.TEST_SET)
@@ -94,7 +101,7 @@ class RecoSystem(object):
                 self.tags_topics = joblib.load(config.TAGS_TOPICS)
             else:
                 self.get_items_tags()
-                self.tags_topics = self.nmf_object.fit_transform(self.items_tags)
+                self.tags_topics = self.nmf_object.fit(self.items_tags)
                 # self.tags_topics.components_ =  (1.0 / 50.0) * np.asarray(self.tags_topics.components_)
                 joblib.dump(self.nmf_object, config.NMF_OBJECT)
                 joblib.dump(self.tags_topics, config.TAGS_TOPICS)
@@ -172,7 +179,7 @@ class RecoSystem(object):
             '''
             Renvoie la précision moyenne du système.
             '''
-            precisions, recalls = [], []
+            self.precisions, self.recalls = [], []
             client_list = self.db.getClientList()
             clients = []
             for d in client_list:
@@ -181,12 +188,23 @@ class RecoSystem(object):
             for c in clients:
                 c.get_reco_list()
                 precision, recall = c.precision_recall()
-                precisions.append(precision)
-                recalls.append(recall)
+                self.precisions.append(precision)
+                self.recalls.append(recall)
 
-            return np.mean(precisions), np.mean(recalls)
-
-
+            return np.mean(self.precisions), np.mean(self.recalls)
+        
+        def precision_recall_curve(self):
+            area = sklearn.metrics.auc(self.precisions, self.recalls, reorder=True)
+            pl.clf()
+            pl.plot(self.recalls, self.precisions, label='Precision-Recall curve')
+            pl.xlabel('Recall')
+            pl.ylabel('Precision')
+            pl.ylim([0.0, 1.05])
+            pl.xlim([0.0, 1.0])
+            pl.title('Precision-Recall: AUC=%0.2f' % area)
+            pl.legend(loc="lower left")
+            pl.show()
+        
     instance = None
     def __new__(cls):
         if RecoSystem.instance is None:

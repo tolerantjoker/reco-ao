@@ -5,7 +5,9 @@ Created on 19 mars 2014
 @author: tolerantjoker
 '''
 import oursql
+
 from db_config import db_config
+
 
 class DB_entity(object):
     '''

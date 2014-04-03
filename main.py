@@ -33,11 +33,11 @@ if __name__ == '__main__':
     
     # On récupère le DataFrame
     df = reco_sys.get_reco_df()
-#     for c in clients:
-#         c.get_reco_series()
-#         print(c)
-#         print(c.get_reco_list())
-#         print('PRECISION/RECALL = ' + str(c.precision_recall()))
-#         print('')
+    for c in clients:
+        c.get_reco_series()
+        print(c)
+        print(c.get_reco_list())
+        print('PRECISION/RECALL = ' + str(c.precision_recall()))
+        print('')
 
     print(reco_sys.precision_recall())

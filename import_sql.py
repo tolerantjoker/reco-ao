@@ -5,14 +5,14 @@ Created on 14 mars 2014
 @author: tolerantjoker
 '''
 ## Import des appels d'offres
-from lxml import etree
-    
+from lxml import etree, etree
+import oursql
+
 tree = etree.parse("announces.xml")
 l_id = tree.xpath("//announce/@id")
 l_title = tree.xpath("//announce/title/text()")
 l_description = tree.xpath("//announce/description/text()")
     
-import oursql
 # Establishing a connection
 conn = oursql.connect(host='localhost', user='root', passwd='', db='test')
     
@@ -24,7 +24,6 @@ with conn.cursor(oursql.DictCursor) as cursor:
     cursor.executemany(query, params)
 
 ## Import des profils clients et des appels d'offres qui leur ont été transmis
-from lxml import etree
 
 tree = etree.parse("profiles.xml")
 profiles = tree.xpath("//company")
@@ -39,10 +38,9 @@ for profile in profiles:
     relations = profile.xpath("test/announce/@id") + profile.xpath("train/announce/@id")
     assignments.extend([(profil_id[0], x) for x in relations])
     
-import oursql
 conn = oursql.connect(host='localhost', user='root', passwd='', db='test')
 query = '''INSERT INTO companies (id, name, url) VALUES(?,?,?)'''
-query2 = '''INSERT INTO assignments (coclientannounce) VALUES(?,?)'''
+query2 = '''INSERT INTO assignments (company, announce) VALUES(?,?)'''
 with conn.cursor(oursql.DictCursor) as cursor:
     cursor.executemany(query, profiles_params)
     cursor.executemany(query2, assignments)
