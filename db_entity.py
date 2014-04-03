@@ -27,6 +27,18 @@ class DB_entity(object):
                 cursor.execute(query)
                 return cursor.fetchall()
         
+        def getClientAnnounces(self, id_client):
+            with self.conn.cursor(oursql.DictCursor) as cursor:
+                query = '''
+                            SELECT announces.id, announces.title, announces.description
+                            FROM assignments
+                            JOIN announces ON assignments.announce = announces.id
+                            WHERE company = ?
+                        '''
+                params = (id_client,)
+                cursor.execute(query, params)
+                return cursor.fetchall()
+        
         def getAnnounceList(self):
             with self.conn.cursor(oursql.DictCursor) as cursor:
                 query = '''SELECT * FROM announces'''

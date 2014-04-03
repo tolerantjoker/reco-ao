@@ -21,6 +21,7 @@ import pandas as pd
 from preprocessor import Preprocessor
 import sklearn.metrics
 import pylab as pl
+from sklearn.cross_validation import train_test_split
 
 
 class RecoSystem(object):
@@ -33,13 +34,12 @@ class RecoSystem(object):
             '''
             Constructor
             '''
-            self.THRESHOLD = 0.72  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
+            self.THRESHOLD = 0.7  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
             
             self.db = db_entity.DB_entity()
             
             self.n_feature = 500
             self.n_components = 20
-            
            
             self.client_list = None
             self.attributed_announce_list = None
@@ -72,12 +72,24 @@ class RecoSystem(object):
             else:
                 self.attributed_announce_list = self.db.getAnnounceAttributed()
                 self.unattributed_announce_list = self.db.getAnnounceAttributed()
-                #self.announce_list = self.attributed_announce_list + self.unattributed_announce_list
-                #self.train_set, self.test_set = cross_validation.train_test_split(self.announce_list)
-                self.train_set, self.test_set = cross_validation.train_test_split(self.attributed_announce_list)
-                self.test_set = self.test_set.tolist()
-                self.test_set.extend(self.unattributed_announce_list)
-                self.test_set = np.array(self.test_set)
+                # self.announce_list = self.attributed_announce_list + self.unattributed_announce_list
+                # self.train_set, self.test_set = cross_validation.train_test_split(self.announce_list)
+                
+#                 self.train_set, self.test_set = cross_validation.train_test_split(self.attributed_announce_list)
+#                 self.test_set = self.test_set.tolist()
+#                 self.test_set.extend(self.unattributed_announce_list)
+#                 self.test_set = np.array(self.test_set)
+
+                client_list = self.db.getClientList()
+                client_train, client_test = (), ()
+                for client in client_list:
+                    s = self.db.getClientAnnounces(client['id'])
+                    train, test = train_test_split(s)
+                    client_train += (train,)
+                    client_test += (test,)
+                self.train_set = np.concatenate(client_train)
+                self.test_set = np.concatenate(client_test + (self.unattributed_announce_list,))
+                
                 
                 # Sauvegarde du train set et du test set
                 joblib.dump(self.train_set, config.TRAIN_SET)
