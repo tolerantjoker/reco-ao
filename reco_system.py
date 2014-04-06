@@ -21,7 +21,6 @@ import pandas as pd
 from preprocessor import Preprocessor
 import sklearn.metrics
 import pylab as pl
-from sklearn.cross_validation import train_test_split
 
 
 class RecoSystem(object):
@@ -34,7 +33,7 @@ class RecoSystem(object):
             '''
             Constructor
             '''
-            self.THRESHOLD = 0.7  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
+            self.THRESHOLD = 0.6  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
             
             self.db = db_entity.DB_entity()
             
@@ -82,14 +81,20 @@ class RecoSystem(object):
 
                 client_list = self.db.getClientList()
                 client_train, client_test = (), ()
-                for client in client_list:
-                    s = self.db.getClientAnnounces(client['id'])
-                    train, test = train_test_split(s)
+                for c in client_list:
+                    client_obj = client.Client(params=c)
+                    s = self.db.getClientAnnounces(c['id'])
+                    train, test = cross_validation.train_test_split(s)
                     client_train += (train,)
                     client_test += (test,)
+                    # On sauvegarde le training set du client
+                    client_obj.train_test = list(train)
+                    joblib.dump(client_obj.train_test, config.CLIENT_TRAIN_SET + str(client_obj.id) + '.save')
+                    # On sauvegarde le test set du client
+                    client_obj.test_set = list(test)
+                    joblib.dump(client_obj.test_set, config.CLIENT_TEST_SET + str(client_obj.id) + '.save')
                 self.train_set = np.concatenate(client_train)
                 self.test_set = np.concatenate(client_test + (self.unattributed_announce_list,))
-                
                 
                 # Sauvegarde du train set et du test set
                 joblib.dump(self.train_set, config.TRAIN_SET)
@@ -99,7 +104,7 @@ class RecoSystem(object):
             '''
             Génère la matrice items_tags à partir du 'train set'
             '''
-            train_set_description = [a['description'] for a in self.train_set]
+            train_set_description = [a['title'] + a['description'] for a in self.train_set]
             self.items_tags = self.vec.fit_transform(train_set_description)
             # sauvegarde du vectorizer avec son vocabulaire 
             joblib.dump(self.vec, config.VEC_RECO)
