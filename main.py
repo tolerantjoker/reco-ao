@@ -33,12 +33,15 @@ if __name__ == '__main__':
     
     # On récupère le DataFrame
     df = reco_sys.get_reco_df()
-    print(df)
+#     print(df)
     for c in clients:
-        c.get_reco_series()
+#         c.get_reco_series()
         print(c)
-        print(c.reco_series)
+#         print(c.reco_series)
         print(c.get_reco_list())
+        print('''Appels d'offres déjà recommandés "manuellement" (true positives) : ''' + str(c.tp()))
+        print('''Appels d'offres recommandés par notre algorithme mais pas "manuellement" par Jurismarchés (false positives)" : ''' + str(c.fp()))
+        print('''Appels d'offres recommandés manuellement par Jurismarchés mais pas par notre algorithme (false negatives) : ''' + str(c.fn()))
         print('PRECISION/RECALL = ' + str(c.precision_recall()))
         print('')
 
