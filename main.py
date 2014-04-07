@@ -39,9 +39,9 @@ if __name__ == '__main__':
         print(c)
 #         print(c.reco_series)
         print(c.get_reco_list())
-        print('''Appels d'offres déjà recommandés "manuellement" (true positives) : ''' + str(c.tp()))
-        print('''Appels d'offres recommandés par notre algorithme mais pas "manuellement" par Jurismarchés (false positives)" : ''' + str(c.fp()))
-        print('''Appels d'offres recommandés manuellement par Jurismarchés mais pas par notre algorithme (false negatives) : ''' + str(c.fn()))
+#         print('''Appels d'offres déjà recommandés "manuellement" (true positives) : ''' + str(c.tp()))
+#         print('''Appels d'offres recommandés par notre algorithme mais pas "manuellement" par Jurismarchés (false positives)" : ''' + str(c.fp()))
+#         print('''Appels d'offres recommandés manuellement par Jurismarchés mais pas par notre algorithme (false negatives) : ''' + str(c.fn()))
         print('PRECISION/RECALL = ' + str(c.precision_recall()))
         print('')
 

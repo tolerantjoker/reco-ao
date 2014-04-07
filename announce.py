@@ -37,7 +37,7 @@ class Announce(object):
         Génère le vecteur item-tags de l'appel d'offre
         '''
         self.item_tags = self.vec.transform([self.title + self.description])
-        #print(self.item_tags.toarray())
+        # print(self.item_tags.toarray())
         return self.item_tags
     
     def get_topics(self):

@@ -72,7 +72,6 @@ class Client(object):
 #             announces_train_id = [e['id'] for e in self.reco_sys.train_set]
 #             self.historic = [e for e in historic if e['announce'] in announces_train_id]
         self.historic = [a['title'] + a['description'] for a in self.train_set]
-
         
     def get_tags(self):
         '''
@@ -117,23 +116,23 @@ class Client(object):
         '''
         Retourne la liste des appels d'offres que Jurismarchés avait envoyés au client.
         '''
-        def get_hist_set_ids():
-            with self.dbentity.conn.cursor() as cursor:
-                query = '''
-                        SELECT announce
-                        FROM assignments
-                        WHERE assignments.company = ?
-                        '''
-                params = (self.id,)
-                cursor.execute(query, params)
-                res = cursor.fetchall()
-                res = reduce(list.__add__, map(list, res))
-            return set(res)
-        def get_test_set_ids():
-            return set([a['id'] for a in self.reco_sys.test_set])
-          
-        return list(get_hist_set_ids() & get_test_set_ids())
-#         return [a['id'] for a in self.test_set]
+#         def get_hist_set_ids():
+#             with self.dbentity.conn.cursor() as cursor:
+#                 query = '''
+#                         SELECT announce
+#                         FROM assignments
+#                         WHERE assignments.company = ?
+#                         '''
+#                 params = (self.id,)
+#                 cursor.execute(query, params)
+#                 res = cursor.fetchall()
+#                 res = reduce(list.__add__, map(list, res))
+#             return set(res)
+#         def get_test_set_ids():
+#             return set([a['id'] for a in self.reco_sys.test_set])
+#           
+#         return list(get_hist_set_ids() & get_test_set_ids())
+        return [a['id'] for a in self.test_set]
     
     def tp(self):
         '''
