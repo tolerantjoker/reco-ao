@@ -7,6 +7,7 @@ Created on 19 mars 2014
 import client
 import db_entity
 import reco_system
+from sklearn.externals import joblib
 
 if __name__ == '__main__':
     
@@ -46,3 +47,6 @@ if __name__ == '__main__':
         print('')
 
     print(reco_sys.precision_recall())
+    
+    for word, value in sorted(reco_sys.vec.vocabulary_.items(), key=lambda x:x[1], reverse=True):
+        print(word + ' : ' + str(value))

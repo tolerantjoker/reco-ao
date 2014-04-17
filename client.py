@@ -29,8 +29,8 @@ class Client(object):
         self.name = params['name']
         self.url = params['url']
         
-        self.train_set = None
-        self.test_set = None
+#         self.train_set = None
+#         self.test_set = None
         
         if os.path.isfile(config.CLIENT_TRAIN_SET + str(self.id) + '.save'):
             self.train_set = joblib.load(config.CLIENT_TRAIN_SET + str(self.id) + '.save')

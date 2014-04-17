@@ -18,7 +18,7 @@ import config
 import db_entity
 import numpy as np
 import pandas as pd
-from preprocessor import Preprocessor
+from analyzer import Analyzer
 import sklearn.metrics
 import pylab as pl
 
@@ -33,12 +33,14 @@ class RecoSystem(object):
             '''
             Constructor
             '''
-            self.THRESHOLD = 0.7  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
+            self.THRESHOLD = 0.6  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
             
             self.db = db_entity.DB_entity()
             
+            self.min_df = 0.1
+            self.max_df = 0.8
             self.n_feature = 500
-            self.n_components = 20
+            self.n_components = 30
            
             self.client_list = None
             self.attributed_announce_list = None
@@ -51,7 +53,10 @@ class RecoSystem(object):
             if(os.path.isfile(config.VEC_RECO)):
                 self.vec = joblib.load(config.VEC_RECO)
             else:
-                self.vec = TfidfVectorizer(tokenizer=Preprocessor(), max_features=self.n_feature)
+                self.vec = TfidfVectorizer(analyzer=Analyzer(),
+                                           max_features=self.n_feature,
+                                           min_df=self.min_df,
+                                           max_df=self.max_df)
                 # joblib.dump(self.vec, config.VEC_RECO)
 #                 self.vec = HashingVectorizer(tokenizer=Preprocessor(),
 #                                              n_features=self.n_feature,
