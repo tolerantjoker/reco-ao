@@ -33,7 +33,7 @@ class RecoSystem(object):
             '''
             Constructor
             '''
-            self.THRESHOLD = 0.6  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
+            self.THRESHOLD = 0.65  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
             
             self.db = db_entity.DB_entity()
             

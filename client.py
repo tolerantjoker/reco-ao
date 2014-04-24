@@ -5,8 +5,6 @@ Created on 19 mars 2014
 @author: tolerantjoker
 '''
 
-import oursql
-
 import db_entity
 import numpy as np
 import reco_system

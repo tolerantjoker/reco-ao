@@ -7,18 +7,12 @@ Created on 19 mars 2014
 import client
 import db_entity
 import reco_system
-from sklearn.externals import joblib
+# from sklearn.externals import joblib
 
 if __name__ == '__main__':
     
     # On construit un objet base de donnée
     db = db_entity.DB_entity()
-    
-    # On récupère la liste des clients que l'on passe dans des objets
-    client_list = db.getClientList()
-    clients = []
-    for d in client_list:
-        clients.append(client.Client(params=d))
     
     print("Construction du système de recommandation")
     reco_sys = reco_system.RecoSystem()
@@ -35,6 +29,13 @@ if __name__ == '__main__':
     # On récupère le DataFrame
     df = reco_sys.get_reco_df()
 #     print(df)
+
+    # On récupère la liste des clients que l'on passe dans des objets
+    client_list = db.getClientList()
+    clients = []
+    for d in client_list:
+        clients.append(client.Client(params=d))
+    
     for c in clients:
 #         c.get_reco_series()
         print(c)
