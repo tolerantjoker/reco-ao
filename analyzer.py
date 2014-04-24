@@ -4,7 +4,6 @@ Created on 20 mars 2014
 
 @author: tolerantjoker
 '''
-
 import re
 import enchant
 import nltk
@@ -12,6 +11,7 @@ from nltk.corpus import stopwords
 from nltk.stem.snowball import FrenchStemmer
 # from nltk import word_tokenize, wordpunct_tokenize
 from nltk.tokenize.regexp import RegexpTokenizer
+import treetaggerwrapper
 
 class Analyzer(object):
     '''
@@ -20,7 +20,8 @@ class Analyzer(object):
     def __call__(self, html):
         raw = Analyzer.clean_html(html)
 #         raw = Analyzer.clean_raw(raw)
-        tokens = Analyzer.tokenize(raw)
+#         tokens = Analyzer.tokenize(raw)
+        tokens = Analyzer.tag(raw)
         tokens = Analyzer.clean_stop_words(tokens)
 #         tokens = Analyzer.normalize(tokens)
         return tokens
@@ -79,6 +80,17 @@ class Analyzer(object):
         return tokens
     
     @staticmethod
+    def tag(text):
+        tagger = treetaggerwrapper.TreeTagger(TAGLANG='fr',
+                                              TAGDIR='C:\Program Files\TreeTagger',
+                                              TAGINENC='utf-8',
+                                              TAGOUTENC='utf-8')
+        tags = tagger.TagText(text)
+        tokens = [t.split('\t')[2] for t in tags if len(t.split('\t')) >= 3 and t.split('\t')[1] == 'NOM']
+#         print(tokens)
+        return tokens
+    
+    @staticmethod
     def clean_stop_words(text):
         d = enchant.Dict('fr_FR')
         tokens = [w.lower() for w in text if d.check(w)]
@@ -89,7 +101,7 @@ class Analyzer(object):
                                       ))
 #         filtered_word_list = set(stopwords.words('french'))
 #         return [w for w in tokens if w not in filtered_word_list and w.isalpha()]
-        return [w for w in tokens if w not in filtered_word_list]
+        return [w for w in tokens if w not in filtered_word_list and w.isalpha()]
     
     @staticmethod
     def normalize(tokens):

@@ -109,7 +109,7 @@ class RecoSystem(object):
             '''
             Génère la matrice items_tags à partir du 'train set'
             '''
-            train_set_description = [a['title'] + a['description'] for a in self.train_set]
+            train_set_description = [a['description'] for a in self.train_set]
             self.items_tags = self.vec.fit_transform(train_set_description)
             # sauvegarde du vectorizer avec son vocabulaire 
             joblib.dump(self.vec, config.VEC_RECO)

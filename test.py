@@ -14,7 +14,7 @@ conn = oursql.connect(host=db_config.db_config['host'], user=db_config.db_config
                                        passwd=db_config.db_config['password'], db=db_config.db_config['db'])
 res = []
 with conn.cursor(oursql.DictCursor) as cursor:
-                query = '''SELECT * FROM announces'''
+                query = '''SELECT * FROM announces LIMIT 0,50'''
                 cursor.execute(query)
                 res = cursor.fetchall()
 corpus = [a['description'] for a in res]

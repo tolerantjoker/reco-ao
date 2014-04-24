@@ -69,7 +69,7 @@ class Client(object):
 #             historic = cursor.fetchall()
 #             announces_train_id = [e['id'] for e in self.reco_sys.train_set]
 #             self.historic = [e for e in historic if e['announce'] in announces_train_id]
-        self.historic = [a['title'] + a['description'] for a in self.train_set]
+        self.historic = [a['description'] for a in self.train_set]
         
     def get_tags(self):
         '''
@@ -77,7 +77,7 @@ class Client(object):
         Ce modèle est construit à partir de l'historique des appels d'offres du client.
         '''
         self.get_historic()
-#         historic = [a['title'] + a['description'] for a in self.historic]
+#         historic = [a['description'] for a in self.historic]
         self.client_tags = self.vec.transform(self.historic)
     
     def get_topics(self):
