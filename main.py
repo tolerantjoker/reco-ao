@@ -4,6 +4,7 @@ Created on 19 mars 2014
 
 @author: tolerantjoker
 '''
+import numpy as np
 import client
 import db_entity
 import reco_system
@@ -48,6 +49,26 @@ if __name__ == '__main__':
         print('')
 
     print(reco_sys.precision_recall())
-    
-    for word, value in sorted(reco_sys.vec.vocabulary_.items(), key=lambda x:x[1], reverse=True):
-        print(word + ' : ' + str(value))
+
+#     for word, value in sorted(reco_sys.vec.vocabulary_.items(), key=lambda x:x[1], reverse=True):
+#         print(word + ' : ' + str(value))
+#     
+#     feature_names = reco_sys.vec.get_feature_names()
+#     response = reco_sys.items_tags
+#     rows = response.nonzero()[0]
+#     cols = response.nonzero()[1]
+#     indices = zip(rows, cols)
+#     
+#     word_frequencies = [(feature_names[col], response[row, col]) for row, col in indices]
+#     for k, v in sorted(word_frequencies, key=lambda x:x[1], reverse=True):
+#         print(str(k) + ' = ' + str(v))
+# 
+# 
+#     n_top_words = 15
+#     feature_names = reco_sys.vec.get_feature_names()
+#  
+#     for topic_idx, topic in enumerate(reco_sys.nmf_object.components_):
+#         print("Topic #%d:" % topic_idx)
+#         print(" ".join([feature_names[i]
+#                         for i in topic.argsort()[:-n_top_words - 1:-1]]))
+#         print()

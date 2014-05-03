@@ -19,8 +19,17 @@ with conn.cursor(oursql.DictCursor) as cursor:
                 res = cursor.fetchall()
 corpus = [a['description'] for a in res]
 
-vec = TfidfVectorizer(tokenizer=analyzer.Analyzer(), min_df=0, max_df=1)
+vec = TfidfVectorizer(tokenizer=analyzer.Analyzer(), max_features=500)
 bag_of_words = vec.fit_transform(corpus)
  
-for word, value in sorted(vec.vocabulary_.items(), key=lambda x:x[1], reverse=True):
-    print(word + ' : ' + str(value))
+# for word, value in vec.vocabulary_.items():
+#     print(word + ' : ' + str(value))
+
+feature_names = vec.get_feature_names()
+rows = bag_of_words.nonzero()[0]
+cols = bag_of_words.nonzero()[1]
+indices = zip(rows, cols)
+    
+word_frequencies = [(feature_names[col], bag_of_words[row, col]) for row, col in indices]
+for k, v in sorted(word_frequencies, key=lambda x:x[1], reverse=True):
+    print(str(k) + ' = ' + str(v))

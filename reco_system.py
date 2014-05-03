@@ -33,14 +33,14 @@ class RecoSystem(object):
             '''
             Constructor
             '''
-            self.THRESHOLD = 0.65  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
+            self.THRESHOLD = .8  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
             
             self.db = db_entity.DB_entity()
             
-            self.min_df = 0.1
+            self.min_df = 1
             self.max_df = 0.8
-            self.n_feature = 500
-            self.n_components = 30
+            self.n_feature = None
+            self.n_components = 20
            
             self.client_list = None
             self.attributed_announce_list = None
@@ -64,7 +64,11 @@ class RecoSystem(object):
 
             self.nmf_object = decomposition.NMF(n_components=self.n_components)
 
-            self.items_tags = None
+            if(os.path.isfile(config.ITEMS_TAGS)):
+                self.items_tags = joblib.load(config.ITEMS_TAGS)
+            else:
+                self.items_tags = None
+            
             self.tags_topics = None
             self.clients_topics = None
             self.reco_df = None
@@ -109,10 +113,14 @@ class RecoSystem(object):
             '''
             Génère la matrice items_tags à partir du 'train set'
             '''
-            train_set_description = [a['description'] for a in self.train_set]
-            self.items_tags = self.vec.fit_transform(train_set_description)
-            # sauvegarde du vectorizer avec son vocabulaire 
-            joblib.dump(self.vec, config.VEC_RECO)
+            if(os.path.isfile(config.ITEMS_TAGS)):
+                self.items_tags = joblib.load(config.ITEMS_TAGS)
+            else:
+                train_set_description = [a['description'] for a in self.train_set]
+                self.items_tags = self.vec.fit_transform(train_set_description)
+                # sauvegarde du vectorizer avec son vocabulaire 
+                joblib.dump(self.vec, config.VEC_RECO)
+                joblib.dump(self.items_tags, config.ITEMS_TAGS)
         
         def get_tags_topics(self):
             '''
