@@ -4,6 +4,7 @@ Created on 20 mars 2014
 
 @author: tolerantjoker
 '''
+
 import os.path
 
 from scipy import sparse
@@ -33,14 +34,14 @@ class RecoSystem(object):
             '''
             Constructor
             '''
-            self.THRESHOLD = .8  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
+            self.THRESHOLD = .7  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
             
             self.db = db_entity.DB_entity()
             
             self.min_df = 1
             self.max_df = 0.8
             self.n_feature = None
-            self.n_components = 20
+            self.n_components = 100
            
             self.client_list = None
             self.attributed_announce_list = None
@@ -74,6 +75,7 @@ class RecoSystem(object):
             self.reco_df = None
         
         def split_train_test(self):
+            
             if os.path.isfile(config.TRAIN_SET) and os.path.isfile(config.TEST_SET):
                 self.train_set = joblib.load(config.TRAIN_SET)
                 self.test_set = joblib.load(config.TEST_SET)
@@ -108,19 +110,25 @@ class RecoSystem(object):
                 # Sauvegarde du train set et du test set
                 joblib.dump(self.train_set, config.TRAIN_SET)
                 joblib.dump(self.test_set, config.TEST_SET)
+                
         
         def get_items_tags(self):
             '''
             Génère la matrice items_tags à partir du 'train set'
             '''
+            print("Construction de item_tags")
             if(os.path.isfile(config.ITEMS_TAGS)):
+                print("--> début de chargement de item_tags")
                 self.items_tags = joblib.load(config.ITEMS_TAGS)
+                print("--> fin de chargement de item_tags")
             else:
+                print("--> début de génération de item_tags")
                 train_set_description = [a['description'] for a in self.train_set]
                 self.items_tags = self.vec.fit_transform(train_set_description)
                 # sauvegarde du vectorizer avec son vocabulaire 
                 joblib.dump(self.vec, config.VEC_RECO)
                 joblib.dump(self.items_tags, config.ITEMS_TAGS)
+                print("--> fin de génération de item_tags")
         
         def get_tags_topics(self):
             '''
