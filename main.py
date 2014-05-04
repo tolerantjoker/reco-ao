@@ -50,9 +50,9 @@ if __name__ == '__main__':
 
     print(reco_sys.precision_recall())
 
-#     for word, value in sorted(reco_sys.vec.vocabulary_.items(), key=lambda x:x[1], reverse=True):
+#     for word, value in sorted(reco_sys.vec.vocabulary_.items(), key=lambda x:x[1]):
 #         print(word + ' : ' + str(value))
-#       
+
 #     feature_names = reco_sys.vec.get_feature_names()
 #     response = reco_sys.items_tags
 #     rows = response.nonzero()[0]
@@ -66,7 +66,7 @@ if __name__ == '__main__':
 #   
 #     n_top_words = 15
 #     feature_names = reco_sys.vec.get_feature_names()
-#    
+#      
 #     for topic_idx, topic in enumerate(reco_sys.nmf_object.components_):
 #         print("Topic #%d:" % topic_idx)
 #         print(" ".join([feature_names[i]
