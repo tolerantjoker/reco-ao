@@ -41,7 +41,7 @@ class RecoSystem(object):
             self.min_df = 1
             self.max_df = 0.8
             self.n_feature = None
-            self.n_components = 20
+            self.n_components = 50
            
             self.client_list = None
             self.attributed_announce_list = None

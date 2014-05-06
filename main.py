@@ -65,7 +65,7 @@ if __name__ == '__main__':
 #   
 #     n_top_words = 15
 #     feature_names = reco_sys.vec.get_feature_names()
-#       
+#        
 #     for topic_idx, topic in enumerate(reco_sys.nmf_object.components_):
 #         print("Topic #%d:" % topic_idx)
 #         print(" ".join([feature_names[i]
