@@ -2,7 +2,7 @@
 '''
 Created on 14 mars 2014
 
-@author: tolerantjoker
+:author: François Royer & Valentin Lhommeau
 '''
 # # Import des appels d'offres
 from lxml import etree

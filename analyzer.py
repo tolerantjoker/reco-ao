@@ -2,14 +2,13 @@
 '''
 Created on 20 mars 2014
 
-@author: tolerantjoker
+:author: François Royer & Valentin Lhommeau
 '''
 import re
 import enchant
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem.snowball import FrenchStemmer
-# from nltk import word_tokenize, wordpunct_tokenize
 from nltk.tokenize.regexp import RegexpTokenizer
 import treetaggerwrapper
 
@@ -18,6 +17,9 @@ class Analyzer(object):
     classdocs
     '''
     def __call__(self, html):
+        '''
+        :param html: une chaîne de caractère au format html.
+        '''
         raw = Analyzer.clean_html(html)
 #         raw = Analyzer.clean_raw(raw)
 #         tokens = Analyzer.tokenize(raw)
@@ -28,59 +30,62 @@ class Analyzer(object):
     
     @staticmethod
     def clean_html(html):
-#         return BeautifulSoup(html).getText()
+        '''
+        :param html: une chaîne de caractère au format html.
+        :return: une chaîne de caractère brute, vierge de toute balise html.
+        '''
         return nltk.clean_html(html).decode('utf-8')
     
-    @staticmethod
-    def clean_raw(raw):
-        '''
-        Fonction qui supprime toutes les mots et valeurs non porteurs de sens
-        |([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6}) --> e-mail
-        |(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/? --> url
-        |\d{1,2}\s?[hH]\s?\d{0,2} --> horaire
-        |[+-]?(\d+\.\d+|\d+\.|\.\d+) --> valeur flottante
-        |[+-]?\d+ --> valeur entière
-        |\w' --> les contractions d', l', etc.
-        |[!"#$%&\'()*+,./:;<=>?@[\]\\^_`{|}~-] --> les ponctuations 
-        '''
-
-        reg_words = r'''(?xi)
-        ((IX)|(IV)|(VI{0,3})|[^V](I{1,3})[^V])\.
-        |([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})
-        |(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?
-        |\$?\d+(\.\d+)?%?
-        |\d{1,2}\s?[hH]\s?\d{0,2}
-        |[+-]?(\d+\.\d+|\d+\.|\.\d+)
-        |[+-]?\d+
-        |[a-z]+[\'\’\´\`\ʻ\′]
-        |([a-z]\.)+
-        |\.\.\.
-        |[!"#$€%&\'()*+,./:;<=>?@[\]\\^_`{|}~-«»°’-]
-        '''
-        raw = re.sub(reg_words, r' ', raw.decode('utf8'))
-        return raw
-#             
-    @staticmethod
-    def tokenize(raw):
-#         tokens = wordpunct_tokenize(raw.decode('utf8'))
-#         return nltk.Text(tokens,'utf8')
-        tokenizer = RegexpTokenizer('''(?xi)
-        ((IX)|(IV)|(VI{0,3})|[^V](I{1,3})[^V])\.
-        |([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})
-        |(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?
-        |\d+(\.\d+)?\s*%
-        |\d{1,2}\s?[hH]\s?\d{0,2}
-        |[+-]?(\d+\.\d+|\d+\.|\.\d+)
-        |[+-]?\d+
-        |\w+
-        |\.\.\.
-        |[^\w\s]
-        ''')
-        tokens = tokenizer.tokenize(raw)
-        return tokens
+#     @staticmethod
+#     def clean_raw(raw):
+#         '''
+#         :param raw: une chaîne de caractères brute.
+#         :return: une chaîne de caractère brute
+#         '''
+# 
+#         reg_words = r'''(?xi)
+#         ((IX)|(IV)|(VI{0,3})|[^V](I{1,3})[^V])\.
+#         |([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})
+#         |(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?
+#         |\$?\d+(\.\d+)?%?
+#         |\d{1,2}\s?[hH]\s?\d{0,2}
+#         |[+-]?(\d+\.\d+|\d+\.|\.\d+)
+#         |[+-]?\d+
+#         |[a-z]+[\'\’\´\`\ʻ\′]
+#         |([a-z]\.)+
+#         |\.\.\.
+#         |[!"#$€%&\'()*+,./:;<=>?@[\]\\^_`{|}~-«»°’-]
+#         '''
+#         raw = re.sub(reg_words, r' ', raw.decode('utf8'))
+#         return raw
+             
+#     @staticmethod
+#     def tokenize(raw):
+#         '''
+#         :param raw: :param raw: une chaîne de caractères brute.
+#         :return: une liste de tokens. 
+#         '''
+#         tokenizer = RegexpTokenizer('''(?xi)
+#         ((IX)|(IV)|(VI{0,3})|[^V](I{1,3})[^V])\.
+#         |([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})
+#         |(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?
+#         |\d+(\.\d+)?\s*%
+#         |\d{1,2}\s?[hH]\s?\d{0,2}
+#         |[+-]?(\d+\.\d+|\d+\.|\.\d+)
+#         |[+-]?\d+
+#         |\w+
+#         |\.\.\.
+#         |[^\w\s]
+#         ''')
+#         tokens = tokenizer.tokenize(raw)
+#         return tokens
     
     @staticmethod
     def tag(text):
+        '''
+        :param text: une chaîne de caractères brute.
+        :return: la liste des <i>noms communs</i> extraits.
+        '''
         tagger = treetaggerwrapper.TreeTagger(TAGLANG='fr',
                                               TAGDIR='C:\Program Files\TreeTagger',
                                               TAGINENC='utf-8',
@@ -89,9 +94,14 @@ class Analyzer(object):
         tokens = [t.split('\t')[2] for t in tags if len(t.split('\t')) >= 3 and t.split('\t')[1] == 'NOM']
 #         print(tokens)
         return tokens
-    
+
     @staticmethod
     def clean_stop_words(text):
+        '''
+        :param text: une liste de tokens
+        :return: la liste des <i>noms communs</i> filtrée par liste de stopwords
+        et qui appartiennent au dictionnaire de la langue française.
+        '''
         d = enchant.Dict('fr_FR')
         tokens = [w.lower() for w in text if d.check(w)]
 #         tokens = [w.lower() for w in text]
@@ -105,8 +115,11 @@ class Analyzer(object):
 #         return [w for w in tokens if w not in filtered_word_list and w.isalpha()]
         return [w for w in tokens if w not in filtered_word_list and w.isalpha()]
     
-    @staticmethod
-    def normalize(tokens):
-        stemmer = FrenchStemmer()
-        return list(set([stemmer.stem(w) for w in tokens]))
+#     @staticmethod
+#     def normalize(tokens):
+#         '''
+#         :param tokens: une liste de tokens
+#         '''
+#         stemmer = FrenchStemmer()
+#         return list(set([stemmer.stem(w) for w in tokens]))
     

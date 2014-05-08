@@ -2,7 +2,7 @@
 '''
 Created on 20 mars 2014
 
-@author: tolerantjoker
+:author: François Royer & Valentin Lhommeau
 '''
 
 import os.path
@@ -13,16 +13,13 @@ from sklearn.externals import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+from analyzer import Analyzer
 import announce
 import client
 import config
 import db_entity
 import numpy as np
 import pandas as pd
-from analyzer import Analyzer
-import sklearn.metrics
-import pylab as pl
-
 
 class RecoSystem(object):
     '''
@@ -41,7 +38,7 @@ class RecoSystem(object):
             self.min_df = 1
             self.max_df = 0.8
             self.n_feature = None
-            self.n_components = 50
+            self.n_components = 500
            
             self.client_list = None
             self.attributed_announce_list = None
@@ -58,10 +55,6 @@ class RecoSystem(object):
                                            max_features=self.n_feature,
                                            min_df=self.min_df,
                                            max_df=self.max_df)
-                # joblib.dump(self.vec, config.VEC_RECO)
-#                 self.vec = HashingVectorizer(tokenizer=Preprocessor(),
-#                                              n_features=self.n_feature,
-#                                              non_negative=True)
 
             self.nmf_object = decomposition.NMF(n_components=self.n_components)
 
@@ -75,20 +68,19 @@ class RecoSystem(object):
             self.reco_df = None
         
         def split_train_test(self):
-            
+            '''
+            Sépare les appels d'offres en deux ensembles :
+            - le training set (75%)
+            - le test set (25%).
+            Cette méthode créer également un training set et un test
+            pour chaque client.
+            '''
             if os.path.isfile(config.TRAIN_SET) and os.path.isfile(config.TEST_SET):
                 self.train_set = joblib.load(config.TRAIN_SET)
                 self.test_set = joblib.load(config.TEST_SET)
             else:
                 self.attributed_announce_list = self.db.getAnnounceAttributed()
                 self.unattributed_announce_list = self.db.getAnnounceAttributed()
-                # self.announce_list = self.attributed_announce_list + self.unattributed_announce_list
-                # self.train_set, self.test_set = cross_validation.train_test_split(self.announce_list)
-                
-#                 self.train_set, self.test_set = cross_validation.train_test_split(self.attributed_announce_list)
-#                 self.test_set = self.test_set.tolist()
-#                 self.test_set.extend(self.unattributed_announce_list)
-#                 self.test_set = np.array(self.test_set)
 
                 client_list = self.db.getClientList()
                 client_train, client_test = (), ()
@@ -114,7 +106,7 @@ class RecoSystem(object):
         
         def get_items_tags(self):
             '''
-            Génère la matrice items_tags à partir du 'train set'
+            Génère la matrice items_tags à partir du 'training set'
             '''
             print("Construction de item_tags")
             if(os.path.isfile(config.ITEMS_TAGS)):
@@ -140,7 +132,7 @@ class RecoSystem(object):
             else:
                 self.get_items_tags()
                 self.tags_topics = self.nmf_object.fit(self.items_tags)
-                # self.tags_topics.components_ =  (1.0 / 50.0) * np.asarray(self.tags_topics.components_)
+
                 joblib.dump(self.nmf_object, config.NMF_OBJECT)
                 joblib.dump(self.tags_topics, config.TAGS_TOPICS)
         
@@ -158,8 +150,6 @@ class RecoSystem(object):
                 
                 self.clients_topics = []
                 for a_client in self.client_list:
-#                     historic = a_client.get_historic()
-#                     client_tags = a_client.get_tags()
                     client_topics = a_client.get_topics()
                     self.clients_topics.append(client_topics)
                 
@@ -171,13 +161,10 @@ class RecoSystem(object):
             '''
             item.get_tags()
             item_topics = sparse.csr_matrix(np.array(item.get_topics()))
-#             item_topics = item.get_topics()
 
             self.get_clients_topics()
             clients_topics = sparse.csr_matrix(np.array(self.clients_topics))
-#             clients_topics = self.clients_topics
-            
-#             item_clients = chi2_kernel(item_topics, clients_topics)
+
             item_clients = cosine_similarity(item_topics, clients_topics)
             return item, item_clients
         
@@ -231,17 +218,6 @@ class RecoSystem(object):
 
             return np.mean(self.precisions), np.mean(self.recalls)
         
-        def precision_recall_curve(self):
-            area = sklearn.metrics.auc(self.precisions, self.recalls, reorder=True)
-            pl.clf()
-            pl.plot(self.recalls, self.precisions, label='Precision-Recall curve')
-            pl.xlabel('Recall')
-            pl.ylabel('Precision')
-            pl.ylim([0.0, 1.05])
-            pl.xlim([0.0, 1.0])
-            pl.title('Precision-Recall: AUC=%0.2f' % area)
-            pl.legend(loc="lower left")
-            pl.show()
         
     instance = None
     def __new__(cls):

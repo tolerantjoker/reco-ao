@@ -2,7 +2,7 @@
 '''
 Created on 19 mars 2014
 
-@author: tolerantjoker
+:author: François Royer & Valentin Lhommeau
 '''
 
 db_config = {'host': 'localhost',
