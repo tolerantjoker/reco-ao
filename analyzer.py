@@ -14,7 +14,7 @@ import treetaggerwrapper
 
 class Analyzer(object):
     '''
-    classdocs
+    Classe qui permet de remplacer la phase de preprocessing (nettoyage) et de tokenizing (segmentation).
     '''
     def __call__(self, html):
         '''

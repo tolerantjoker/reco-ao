@@ -16,6 +16,19 @@ from sklearn.externals import joblib
 class Client(object):
     '''
     Classe qui représente un client.
+    
+    :ivar dbentity:  une instance de gestion de la base de données.
+    :ivar id: l'identifiant du client.
+    :ivar name: le nom du client.
+    :ivar url: le site web du client.
+    :ivar train_set: le training set du client.
+    :ivar test_set: le testing set du client.
+    :ivar reco_sys:  instance du système de recommandation.
+    :ivar historic: l'historique des appels d'offres envoyés ou recommandés au client.
+    :ivar client_tags: la représentation sous de forme de sac de mots (bag of words) du training set du client.
+    :ivar client_topics: la représentation sous forme de topics de l'historique du client.
+    :ivar vec: l'objet Vectorizer qui permet de construire la matrice items_tags (fréquences TFIDF) à partir du training set du client.
+    :ivar reco_series: la liste des appels d'offres recommandés au client, avec pour chaque appel d'offres, son affinité associée (chiffre entre 0 et 1).
     '''
 
     def __init__(self, params):

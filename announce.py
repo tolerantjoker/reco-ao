@@ -9,7 +9,16 @@ import reco_system
 
 class Announce(object):
     '''
-    Classe qui représente un appel d'offre.
+    Classe qui représente un appel d'offres.
+    
+    :ivar id: identifiant de l'appel d'offres.
+    :ivar title: titre de l'appel d'offres.
+    :ivar description: description de l'appel d'offres.
+    
+    :ivar vec: objet Vectorizer qui créer un BagOfWords d'un appel d'offres.
+    :ivar item_tags: matrice qui représente le "BagOfWords model" d'un appel d'offres.
+    :ivar item_topics: matrice qui représente les affinités avec les topics d'un appel d'offres.
+    :ivar reco_sys: instance du système de recommandation.
     '''
 
     def __init__(self, params):
@@ -31,15 +40,14 @@ class Announce(object):
         
     def get_tags(self):
         '''
-        Génère le vecteur item-tags de l'appel d'offre
+        :return: le vecteur item-tags de l'appel d'offres avec les fréquences tfidf.
         '''
         self.item_tags = self.vec.transform([self.title + self.description])
         return self.item_tags
     
     def get_topics(self):
         '''
-        Détermine les affinités de l'appel d'offre avec les différents topics.
-        On calcule les affinités par un calcul de similarité entre item-tags et tags-topics.
+        :return: le vecteur item-topics de l'appel d'offres avec ses affinités vis-à-vis de chacun des topics.
         '''
         self.item_topics = self.reco_sys.nmf_object.transform(self.item_tags)
         return self.item_topics

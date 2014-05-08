@@ -23,7 +23,28 @@ import pandas as pd
 
 class RecoSystem(object):
     '''
-    classdocs
+    Classe qui représente une instance du système de recommandation.
+    
+    :ivar THRESHOLD: le seuil pour accepter la recommandation d'un appel d'offres.
+    :ivar db: une instance de gestion de la base de données.
+    :ivar min_df: le nombre minimum de documents dans lesquels un mot doit apparaître pour être conservé dans 
+    le BagOfWords (pour plus de détails cf. la documentation de scikit-learn).
+    :ivar max_df: le nombre minimum de documents dans lesquels un mot doit apparaître pour être conservé dans 
+    le BagOfWords (pour plus de détails cf. la documentation de scikit-learn).
+    :ivar n_feature: le nombre maximal de mots qui sont conservé dans le BagOfWords.
+    :ivar n_components: le nombre de composantes/thèmes/topics à conserver dans la matrice tags_topics.
+    :ivar client_list: la liste des clients.
+    :ivar attributed_announce_list: la liste de toutes les annonces attribuées.
+    :ivar unattributed_announce_list: la liste de toutes les annonces non attribuées.
+    :ivar announce_list: la liste de toutes les appels d'offres.
+    :ivar train_set: le training set qui représente 75 % du corpus total.
+    :ivar test_set: le testing set qui représente 25 % du corpus total.
+    :ivar vec: l'objet Vectorizer qui permet de construire la matrice items_tags (fréquences TFIDF) à partir du training set.
+    :ivar nmf_object: l'objet qui permet de construire la matrice tags_topics grâce à la méthode NMF (Non Negative Matrix Factorization).
+    :ivar items_tags: la matrice qui contient la représentation en sacs de mots (bags of words) des appels d'offres du training set.
+    :ivar tags_topics: la matrice qui contient les coefficients des topics.
+    :ivar clients_topics: la matrice qui contient les topics qui reflètent les profils de chaque client.
+    :ivar reco_df: la pandas.DataFrame qui contient résumé des affinités des clients avec chaque nouvel appel d'offres arrivant.
     '''
     class __Singleton:
         
@@ -31,7 +52,7 @@ class RecoSystem(object):
             '''
             Constructor
             '''
-            self.THRESHOLD = .85  # Seuil pour accepter/rejetter la recommandation d'un appel d'offre
+            self.THRESHOLD = .85  # Seuil pour accepter/rejetter la recommandation d'un appel d'offres
             
             self.db = db_entity.DB_entity()
             
@@ -157,7 +178,7 @@ class RecoSystem(object):
         
         def get_item_clients(self, item):
             '''
-            Génère les affinités des clients vis à vis d'un appel d'offre entrant
+            Génère les affinités des clients vis à vis d'un appel d'offres entrant
             '''
             item.get_tags()
             item_topics = sparse.csr_matrix(np.array(item.get_topics()))

@@ -23,7 +23,7 @@ if __name__ == '__main__':
     print("Construction de tags_topics")
     reco_sys.get_tags_topics()
 
-    # Recommandation d'un appel d'offre à un client
+    # Recommandation d'un appel d'offres à un client
     print("Recommandation...")
     
     # On récupère le DataFrame
