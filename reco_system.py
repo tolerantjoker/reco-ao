@@ -27,10 +27,8 @@ class RecoSystem(object):
     
     :ivar THRESHOLD: le seuil pour accepter la recommandation d'un appel d'offres.
     :ivar db: une instance de gestion de la base de données.
-    :ivar min_df: le nombre minimum de documents dans lesquels un mot doit apparaître pour être conservé dans 
-    le BagOfWords (pour plus de détails cf. la documentation de scikit-learn).
-    :ivar max_df: le nombre minimum de documents dans lesquels un mot doit apparaître pour être conservé dans 
-    le BagOfWords (pour plus de détails cf. la documentation de scikit-learn).
+    :ivar min_df: le nombre minimum de documents dans lesquels un mot doit apparaître pour être conservé dans le BagOfWords (pour plus de détails cf. la documentation de scikit-learn).
+    :ivar max_df: le nombre minimum de documents dans lesquels un mot doit apparaître pour être conservé dans le BagOfWords (pour plus de détails cf. la documentation de scikit-learn).
     :ivar n_feature: le nombre maximal de mots qui sont conservé dans le BagOfWords.
     :ivar n_components: le nombre de composantes/thèmes/topics à conserver dans la matrice tags_topics.
     :ivar client_list: la liste des clients.

@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>reco_system module &mdash; reco-ao 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="reco-ao 1.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">reco-ao 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-reco_system">
+<span id="reco-system-module"></span><h1>reco_system module<a class="headerlink" href="#module-reco_system" title="Permalink to this headline">¶</a></h1>
+<p>Created on 20 mars 2014</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">François Royer &amp; Valentin Lhommeau</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="reco_system.RecoSystem">
+<em class="property">class </em><tt class="descclassname">reco_system.</tt><tt class="descname">RecoSystem</tt><a class="headerlink" href="#reco_system.RecoSystem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Classe qui représente une instance du système de recommandation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>THRESHOLD</strong> &#8211; le seuil pour accepter la recommandation d&#8217;un appel d&#8217;offres.</li>
+<li><strong>db</strong> &#8211; une instance de gestion de la base de données.</li>
+<li><strong>min_df</strong> &#8211; le nombre minimum de documents dans lesquels un mot doit apparaître pour être conservé dans le BagOfWords (pour plus de détails cf. la documentation de scikit-learn).</li>
+<li><strong>max_df</strong> &#8211; le nombre minimum de documents dans lesquels un mot doit apparaître pour être conservé dans le BagOfWords (pour plus de détails cf. la documentation de scikit-learn).</li>
+<li><strong>n_feature</strong> &#8211; le nombre maximal de mots qui sont conservé dans le BagOfWords.</li>
+<li><strong>n_components</strong> &#8211; le nombre de composantes/thèmes/topics à conserver dans la matrice tags_topics.</li>
+<li><strong>client_list</strong> &#8211; la liste des clients.</li>
+<li><strong>attributed_announce_list</strong> &#8211; la liste de toutes les annonces attribuées.</li>
+<li><strong>unattributed_announce_list</strong> &#8211; la liste de toutes les annonces non attribuées.</li>
+<li><strong>announce_list</strong> &#8211; la liste de toutes les appels d&#8217;offres.</li>
+<li><strong>train_set</strong> &#8211; le training set qui représente 75 % du corpus total.</li>
+<li><strong>test_set</strong> &#8211; le testing set qui représente 25 % du corpus total.</li>
+<li><strong>vec</strong> &#8211; l&#8217;objet Vectorizer qui permet de construire la matrice items_tags (fréquences TFIDF) à partir du training set.</li>
+<li><strong>nmf_object</strong> &#8211; l&#8217;objet qui permet de construire la matrice tags_topics grâce à la méthode NMF (Non Negative Matrix Factorization).</li>
+<li><strong>items_tags</strong> &#8211; la matrice qui contient la représentation en sacs de mots (bags of words) des appels d&#8217;offres du training set.</li>
+<li><strong>tags_topics</strong> &#8211; la matrice qui contient les coefficients des topics.</li>
+<li><strong>clients_topics</strong> &#8211; la matrice qui contient les topics qui reflètent les profils de chaque client.</li>
+<li><strong>reco_df</strong> &#8211; la pandas.DataFrame qui contient résumé des affinités des clients avec chaque nouvel appel d&#8217;offres arrivant.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="reco_system.RecoSystem.instance">
+<tt class="descname">instance</tt><em class="property"> = None</em><a class="headerlink" href="#reco_system.RecoSystem.instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/reco_system.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">reco-ao 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, François Royer et Valentin Lhommeau.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

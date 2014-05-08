@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>client module &mdash; reco-ao 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="reco-ao 1.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">reco-ao 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-client">
+<span id="client-module"></span><h1>client module<a class="headerlink" href="#module-client" title="Permalink to this headline">¶</a></h1>
+<p>Created on 19 mars 2014</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">François Royer &amp; Valentin Lhommeau</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="client.Client">
+<em class="property">class </em><tt class="descclassname">client.</tt><tt class="descname">Client</tt><big>(</big><em>params</em><big>)</big><a class="headerlink" href="#client.Client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Classe qui représente un client.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dbentity</strong> &#8211; une instance de gestion de la base de données.</li>
+<li><strong>id</strong> &#8211; l&#8217;identifiant du client.</li>
+<li><strong>name</strong> &#8211; le nom du client.</li>
+<li><strong>url</strong> &#8211; le site web du client.</li>
+<li><strong>train_set</strong> &#8211; le training set du client.</li>
+<li><strong>test_set</strong> &#8211; le testing set du client.</li>
+<li><strong>reco_sys</strong> &#8211; instance du système de recommandation.</li>
+<li><strong>historic</strong> &#8211; l&#8217;historique des appels d&#8217;offres envoyés ou recommandés au client.</li>
+<li><strong>client_tags</strong> &#8211; la représentation sous de forme de sac de mots (bag of words) du training set du client.</li>
+<li><strong>client_topics</strong> &#8211; la représentation sous forme de topics de l&#8217;historique du client.</li>
+<li><strong>vec</strong> &#8211; l&#8217;objet Vectorizer qui permet de construire la matrice items_tags (fréquences TFIDF) à partir du training set du client.</li>
+<li><strong>reco_series</strong> &#8211; la liste des appels d&#8217;offres recommandés au client, avec pour chaque appel d&#8217;offres, son affinité associée (chiffre entre 0 et 1).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="client.Client.fn">
+<tt class="descname">fn</tt><big>(</big><big>)</big><a class="headerlink" href="#client.Client.fn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne les &#8216;false negatives&#8217; c&#8217;est-à-dire la liste des appels d&#8217;offres que Jurismarchés lui avait 
+recommandés mais que nous ne lui avons pas recommandés.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="client.Client.fp">
+<tt class="descname">fp</tt><big>(</big><big>)</big><a class="headerlink" href="#client.Client.fp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne les &#8216;false positives&#8217; c&#8217;est-à-dire la liste des appels d&#8217;offres que nous avons recommandés
+au client MAIS qui ne lui avaient pas été recommandés par Jurismarchés.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="client.Client.get_historic">
+<tt class="descname">get_historic</tt><big>(</big><big>)</big><a class="headerlink" href="#client.Client.get_historic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des appels d&#8217;offres qui ont été attribués au client.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="client.Client.get_list_jurismarches">
+<tt class="descname">get_list_jurismarches</tt><big>(</big><big>)</big><a class="headerlink" href="#client.Client.get_list_jurismarches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des appels d&#8217;offres que Jurismarchés avait envoyés au client.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="client.Client.get_reco_list">
+<tt class="descname">get_reco_list</tt><big>(</big><big>)</big><a class="headerlink" href="#client.Client.get_reco_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renvoie la liste des identifiants des appels d&#8217;offres recommandés au client par le &#8216;RecoSystem&#8217;.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="client.Client.get_reco_series">
+<tt class="descname">get_reco_series</tt><big>(</big><big>)</big><a class="headerlink" href="#client.Client.get_reco_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renvoie la liste des appels d&#8217;offres recommandés au client,
+avec, pour chaque appel d&#8217;offres, son affinité associée.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="client.Client.get_tags">
+<tt class="descname">get_tags</tt><big>(</big><big>)</big><a class="headerlink" href="#client.Client.get_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renvoie le modèle &#8216;bag-of-words&#8217; d&#8217;un client.
+Ce modèle est construit à partir de l&#8217;historique des appels d&#8217;offres du client.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="client.Client.get_topics">
+<tt class="descname">get_topics</tt><big>(</big><big>)</big><a class="headerlink" href="#client.Client.get_topics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renvoie les affinités du client avec chaque topic</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="client.Client.precision_recall">
+<tt class="descname">precision_recall</tt><big>(</big><big>)</big><a class="headerlink" href="#client.Client.precision_recall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne les valeurs des métriques precision et recall.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="client.Client.tp">
+<tt class="descname">tp</tt><big>(</big><big>)</big><a class="headerlink" href="#client.Client.tp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne les &#8216;true positives&#8217; c&#8217;est-à-dire la liste des appels d&#8217;offres que nous avons recommandés
+au client ET qui lui avaient effectivement été recommandés par Jurismarchés.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/client.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">reco-ao 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, François Royer et Valentin Lhommeau.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>treetaggerwrapper module &mdash; reco-ao 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="reco-ao 1.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">reco-ao 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-treetaggerwrapper">
+<span id="treetaggerwrapper-module"></span><h1>treetaggerwrapper module<a class="headerlink" href="#module-treetaggerwrapper" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="treetaggerwrapper-python-wrapper-for-treetagger">
+<h2><a class="reference internal" href="#module-treetaggerwrapper" title="treetaggerwrapper"><tt class="xref py py-mod docutils literal"><span class="pre">treetaggerwrapper</span></tt></a> &#8211; Python wrapper for TreeTagger<a class="headerlink" href="#treetaggerwrapper-python-wrapper-for-treetagger" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Laurent Pointal &lt;<a class="reference external" href="mailto:laurent&#46;pointal&#37;&#52;&#48;limsi&#46;fr">laurent<span>&#46;</span>pointal<span>&#64;</span>limsi<span>&#46;</span>fr</a>&gt; &lt;<a class="reference external" href="mailto:laurent&#46;pointal&#37;&#52;&#48;laposte&#46;net">laurent<span>&#46;</span>pointal<span>&#64;</span>laposte<span>&#46;</span>net</a>&gt;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">organization:</th><td class="field-body">CNRS - LIMSI</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body">CNRS - 2004-2009</td>
+</tr>
+<tr class="field-even field"><th class="field-name">license:</th><td class="field-body">GNU-GPL Version 3 or greater</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">version:</th><td class="field-body">$Id$</td>
+</tr>
+</tbody>
+</table>
+<p>For TreeTagger, see <a class="reference external" href="http://www.ims.uni-stuttgart.de/projekte/corplex/TreeTagger/DecisionTreeTagger.html">Helmut Schmid TreeTagger site</a>.</p>
+<p>For this module, see:</p>
+<ul>
+<li><p class="first"><a class="reference external" href="http://laurent.pointal.org/python/projets/treetaggerwrapper">Project page</a></p>
+</li>
+<li><p class="first"><a class="reference external" href="http://www.limsi.fr/Individu/pointal/python/treetaggerwrapper-doc/">Source documentation</a></p>
+</li>
+<li><p class="first"><a class="reference external" href="https://sourcesup.cru.fr/scm/?group_id=647">Source repository</a></p>
+</li>
+<li><p class="first"><a class="reference external" href="http://www.limsi.fr/Individu/pointal/python/treetaggerwrapper.py">Recent source</a></p>
+<p>You can also retrieve the latest version of this module with the svn command:</p>
+<div class="highlight-python"><div class="highlight"><pre>svn export https://subversion.cru.fr/ttpw/trunk/treetaggerwrapper/treetaggerwrapper.py
+</pre></div>
+</div>
+</li>
+</ul>
+<p>This wrapper tool is intended to be used in larger projects, where multiple
+chunk of texts must be processed via TreeTagger (else you may simply use the
+base TreeTagger installation as an external command).</p>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>Simply put the module in a directory listed in the Python path.</p>
+<p>You should set up an environment variable <span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">TAGDIR</span></tt> to reference the
+TreeTagger software installation directory (the one with <tt class="file docutils literal"><span class="pre">bin</span></tt>, <tt class="file docutils literal"><span class="pre">lib</span></tt>
+and <tt class="file docutils literal"><span class="pre">cmd</span></tt> subdirectories).
+If you dont set up such a variable, you can give a <cite>TAGDIR</cite> named argument
+when building a <a class="reference internal" href="#treetaggerwrapper.TreeTagger" title="treetaggerwrapper.TreeTagger"><tt class="xref py py-class docutils literal"><span class="pre">TreeTagger</span></tt></a> object to provide this information.</p>
+</div>
+<div class="section" id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">treetaggerwrapper</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#1) build a TreeTagger wrapper:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tagger</span> <span class="o">=</span> <span class="n">treetaggerwrapper</span><span class="o">.</span><span class="n">TreeTagger</span><span class="p">(</span><span class="n">TAGLANG</span><span class="o">=</span><span class="s">&#39;en&#39;</span><span class="p">,</span><span class="n">TAGDIR</span><span class="o">=</span><span class="s">&#39;~/TreeTagger&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#2) tag your text.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tags</span> <span class="o">=</span> <span class="n">tagger</span><span class="o">.</span><span class="n">TagText</span><span class="p">(</span><span class="s">&quot;This is a very short text to tag.&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#3) use the tags list... (list of string output from TreeTagger).</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">tags</span>
+<span class="go">[&#39;This      DT      this&#39;,</span>
+<span class="go"> &#39;is        VBZ     be&#39;,</span>
+<span class="go"> &#39;a DT      a&#39;,</span>
+<span class="go"> &#39;very      RB      very&#39;,</span>
+<span class="go"> &#39;short     JJ      short&#39;,</span>
+<span class="go"> &#39;text      NN      text&#39;,</span>
+<span class="go"> &#39;to        TO      to&#39;,</span>
+<span class="go"> &#39;tag       VB      tag&#39;,</span>
+<span class="go"> &#39;. SENT    .&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Note: in output strings, fields are separated with tab chars.</span>
+</pre></div>
+</div>
+<p>The module can be used as a command line tool too, for more information
+ask for module help:</p>
+<div class="highlight-python"><div class="highlight"><pre>python treetaggerwrapper.py --help
+</pre></div>
+</div>
+</div>
+<div class="section" id="processing">
+<h3>Processing<a class="headerlink" href="#processing" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="encoding">
+<h4>Encoding<a class="headerlink" href="#encoding" title="Permalink to this headline">¶</a></h4>
+<p>By default files and <cite>str</cite> strings are considered to be using latin1 encoding.</p>
+<ul>
+<li><dl class="first docutils">
+<dt>You can specify the encoding when using the script as a command-line tool,</dt>
+<dd><p class="first last">with the <em class="xref std std-option">-e</em> param (see online help).</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">When using the script as an embedded tool into a larger project, you can use
+different parameter types as <a class="reference internal" href="#treetaggerwrapper.TreeTagger.TagText" title="treetaggerwrapper.TreeTagger.TagText"><tt class="xref py py-meth docutils literal"><span class="pre">TreeTagger.TagText()</span></tt></a> <cite>text</cite> parameter.</p>
+<ul class="simple">
+<li>You can use unicode strings, and <tt class="xref py py-meth docutils literal"><span class="pre">TagText()</span></tt> will return list of unicode
+strings. If you fill&#8217;in TagText with a list of strings and dont provide
+and <cite>encoding</cite> parameter, TagText will also return unicode strings
+(same if you set <cite>encoding</cite> to <cite>unicode</cite> or <cite>&#8220;unicode&#8221;</cite>.</li>
+<li>You can use <cite>str</cite> strings and specify an alternate <cite>encoding</cite> (and an alternate
+<cite>errors</cite> detection), and TagText() will automatically convert input from this
+encoding and output to this encoding.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="this-module-does-two-main-things">
+<h4>This module does two main things<a class="headerlink" href="#this-module-does-two-main-things" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Manage preprocessing of text in place of external Perl scripts as in
+base TreeTagger installation, thus avoid starting Perl each time a chunk
+of text must be tagged.</li>
+<li>Keep alive a pipe connected to TreeTagger process, and use that pipe
+to send data and retrieve tags, thus avoid starting TreeTagger each
+time.</li>
+</ul>
+<p>Use of pipes avoid writing/reading temporary files on disk too.</p>
+</div>
+<div class="section" id="other-things-done-by-this-module">
+<h4>Other things done by this module<a class="headerlink" href="#other-things-done-by-this-module" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Can number lines into XML tags (to identify lines after TreeTagger
+processing).</li>
+<li>Can mark whitespaces with XML tags.</li>
+<li>By default replace non-talk parts like URLs, emails, IP addresses,
+DNS names (can be turned off). Replaced by a &#8216;replaced-xxx&#8217; string
+followed by an XML tag containing the replaced text as attribute.</li>
+<li>Acronyms like U.S.A. are systematically written with a final dot,
+even if it is missing in original file.</li>
+</ul>
+<p>In normal mode, all journal outputs are done via Python standard logging system,
+standard output is only used if a) you run the module in pipe mode (ie.
+results goes to stdout), or b) you set DEBUG or DEBUG_PREPROCESS global
+variables and you use the module directly on command line (which make journal
+and other traces to be sent to stdout).</p>
+<p>For an example of logging use, see <tt class="xref py py-func docutils literal"><span class="pre">enable_debugging_log()</span></tt> function.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Some non-exported functions and globals can be nice to use in other
+contexts:
+<a class="reference internal" href="#treetaggerwrapper.SGML_tag" title="treetaggerwrapper.SGML_tag"><tt class="xref py py-data docutils literal"><span class="pre">SGML_tag</span></tt></a>, <tt class="xref py py-func docutils literal"><span class="pre">IsSGMLTag()</span></tt>, <tt class="xref py py-func docutils literal"><span class="pre">SplitSGML()</span></tt>,
+<a class="reference internal" href="#treetaggerwrapper.Ip_expression" title="treetaggerwrapper.Ip_expression"><tt class="xref py py-data docutils literal"><span class="pre">Ip_expression</span></tt></a>, <a class="reference internal" href="#treetaggerwrapper.DnsHost_expression" title="treetaggerwrapper.DnsHost_expression"><tt class="xref py py-data docutils literal"><span class="pre">DnsHost_expression</span></tt></a>,
+<a class="reference internal" href="#treetaggerwrapper.UrlMatch_expression" title="treetaggerwrapper.UrlMatch_expression"><tt class="xref py py-data docutils literal"><span class="pre">UrlMatch_expression</span></tt></a>, <a class="reference internal" href="#treetaggerwrapper.EmailMatch_expression" title="treetaggerwrapper.EmailMatch_expression"><tt class="xref py py-data docutils literal"><span class="pre">EmailMatch_expression</span></tt></a>,
+<tt class="xref py py-func docutils literal"><span class="pre">PipeWriter()</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="module-globals-and-constants">
+<h4>Module globals and constants<a class="headerlink" href="#module-globals-and-constants" title="Permalink to this headline">¶</a></h4>
+<dl class="data">
+<dt id="treetaggerwrapper.DEBUG">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">DEBUG</tt><big>(</big><em>boolean</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.DEBUG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set to enable debugging code (mainly logs).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.DEBUG_PREPROCESS">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">DEBUG_PREPROCESS</tt><big>(</big><em>boolean</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.DEBUG_PREPROCESS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set to enable preprocessing specific debugging code.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.RESEXT">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">RESEXT</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.RESEXT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extension added to result files when using command-line (&#8216;ttr&#8217;).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.logger">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">logger</tt><big>(</big><em>logging.Logger</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logger object for this module.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.STARTOFTEXT">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">STARTOFTEXT</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.STARTOFTEXT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tag to identify begin of a text in the data flow.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.ENDOFTEXT">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">ENDOFTEXT</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.ENDOFTEXT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tag to identify end of a text in the data flow.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.NUMBEROFLINE">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">NUMBEROFLINE</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.NUMBEROFLINE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tag to identify line numbers from source text.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.TAGSPACE">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">TAGSPACE</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TAGSPACE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tag to identify spaces in output.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.TAGTAB">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">TAGTAB</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TAGTAB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tag to identify horizontal tabulations in output.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.TAGLF">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">TAGLF</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TAGLF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tag to identify line feeds in output.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.TAGCR">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">TAGCR</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TAGCR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tag to identify carriage returns in output.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.TAGVT">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">TAGVT</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TAGVT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tag to identify vertical tabulations in output.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.TAGFF">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">TAGFF</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TAGFF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tag to identify form feeds in output.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.TREETAGGER_ENCODING">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">TREETAGGER_ENCODING</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TREETAGGER_ENCODING" title="Permalink to this definition">¶</a></dt>
+<dd><p>In/out encoding for TreeTagger (latin1).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.TREETAGGER_INENCERR">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">TREETAGGER_INENCERR</tt><big>(</big><em>str</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TREETAGGER_INENCERR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Management of encoding errors fot TT input (replace).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.TREETAGGER_OUTENCERR">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">TREETAGGER_OUTENCERR</tt><big>(</big><em>str</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TREETAGGER_OUTENCERR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Management of decoding errors of TT output (replace).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.USER_ENCODING">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">USER_ENCODING</tt><big>(</big><em>str</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.USER_ENCODING" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default input and output for files and strings with no
+encoding specified (latin1).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.DEFAULT_ENCERRORS">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">DEFAULT_ENCERRORS</tt><big>(</big><em>str</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.DEFAULT_ENCERRORS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error processing for user data encoding/decoding (strict).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.alonemarks">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">alonemarks</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.alonemarks" title="Permalink to this definition">¶</a></dt>
+<dd><p>String containing chars which must be kept alone (this string
+is used in regular expressions inside square brackets parts).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.g_langsupport">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">g_langsupport</tt><big>(</big><em>dict</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.g_langsupport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionnary with data for each usable langage.</p>
+<p>g_langsupport[langage] ==&gt; dict of data</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.SGML_name">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">SGML_name</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.SGML_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regular expression string for XML names.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.SGML_tag">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">SGML_tag</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.SGML_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regular expression string to match XML tags.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.SGML_tag_re">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">SGML_tag_re</tt><big>(</big><em>re.SRE_Pattern</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.SGML_tag_re" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regular expression object to match XML tags.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.Ip_expression">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">Ip_expression</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.Ip_expression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regular expression string to match IP addresses.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.IpMatch_re">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">IpMatch_re</tt><big>(</big><em>re.SRE_Pattern</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.IpMatch_re" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regular expression object to match IP addresses.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.DnsHost_expression">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">DnsHost_expression</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.DnsHost_expression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regular expression string to match DNS names.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.DnsHostMatch_re">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">DnsHostMatch_re</tt><big>(</big><em>re.SRE_Pattern</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.DnsHostMatch_re" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regular expression object to match DNS names.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.UrlMatch_expression">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">UrlMatch_expression</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.UrlMatch_expression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regular expression string to match URLs.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.UrlMatch_re">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">UrlMatch_re</tt><big>(</big><em>re.SRE_Pattern</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.UrlMatch_re" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regular expression object to match URLs.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.EmailMatch_expression">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">EmailMatch_expression</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.EmailMatch_expression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regular expression string to match email addresses.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="treetaggerwrapper.EmailMatch_re">
+<tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">EmailMatch_re</tt><big>(</big><em>re.SRE_Pattern</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.EmailMatch_re" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regular expression object to match email addresses.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-exceptions-class-and-functions">
+<h4>Module exceptions, class and functions<a class="headerlink" href="#module-exceptions-class-and-functions" title="Permalink to this headline">¶</a></h4>
+<dl class="exception">
+<dt id="treetaggerwrapper.TreeTaggerError">
+<em class="property">exception </em><tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">TreeTaggerError</tt><a class="headerlink" href="#treetaggerwrapper.TreeTaggerError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
+<p>For exceptions generated directly by TreeTagger class code.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="treetaggerwrapper.TreeTagger">
+<em class="property">class </em><tt class="descclassname">treetaggerwrapper.</tt><tt class="descname">TreeTagger</tt><big>(</big><em>**kargs</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TreeTagger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Wrap TreeTagger binary to optimize its usage on multiple texts.</p>
+<p>The two main methods you may use are the L{__init__()} initializer,
+and the L{TagText()} method to process your data and get TreeTagger
+output results.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lang</strong> &#8211; langage supported by this tagger (&#8216;en&#8217;, &#8216;fr&#8217;, &#8216;de&#8217;, &#8216;es).</li>
+<li><strong>langsupport</strong> &#8211; dictionnary of langage specific values (ref. to
+g_langsupport[lang] dictionnary).</li>
+<li><strong>tagdir</strong> &#8211; path to directory of installation of TreeTagger.
+Set via TAGDIR env. var or construction param.</li>
+<li><strong>tagbindir</strong> &#8211; path to binary dir into TreeTagger dir.</li>
+<li><strong>tagcmddir</strong> &#8211; path to commands dir into TreeTagger dir.</li>
+<li><strong>taglibdir</strong> &#8211; path to libraries dir into TreeTagger dir.</li>
+<li><strong>tagbin</strong> &#8211; path to TreeTagger binary file (used to launch process).</li>
+<li><strong>tagopt</strong> &#8211; command line options for TreeTagger.</li>
+<li><strong>tagparfile</strong> &#8211; path to TreeTagger library file.</li>
+<li><strong>abbrevfile</strong> &#8211; path to abbreviations file.</li>
+<li><strong>taginencoding</strong> &#8211; encoding to use for TreeTagger input encoding.</li>
+<li><strong>tagoutencoding</strong> &#8211; encoding to use for TreeTagger output decoding.</li>
+<li><strong>taginencerr</strong> &#8211; management of encoding errors for TreeTagger input.</li>
+<li><strong>tagoutencerr</strong> &#8211; management of encoding errors for TreeTagger output.</li>
+<li><strong>abbterms</strong> &#8211; dictionnary of abbreviation terms for fast lookup.
+Filled when reading abbreviations file.</li>
+<li><strong>pchar</strong> &#8211; characters which have to be cut off at the beginning of
+a word.
+Filled from g_langsupport dict.</li>
+<li><strong>pchar_re</strong> &#8211; regular expression object to cut-off such chars.</li>
+<li><strong>fchar</strong> &#8211; characters which have to be cut off at the end of a word.
+Filled from g_langsupport dict.</li>
+<li><strong>fchar_re</strong> &#8211; regular expression object to cut-off such chars.</li>
+<li><strong>pclictic</strong> &#8211; character sequences which have to be cut off at the
+beginning of a word.
+Filled from g_langsupport dict.</li>
+<li><strong>pclictic_re</strong> &#8211; regular expression object to cut-off pclictic
+sequences.</li>
+<li><strong>fclictic</strong> &#8211; character sequences which have to be cut off at the end
+of a word.
+Filled from g_langsupport dict.</li>
+<li><strong>fclictic_re</strong> &#8211; regular expression object to cut-off fclictic
+sequences.</li>
+<li><strong>number</strong> &#8211; regular expression of number recognition for the langage.
+Filled from g_langsupport dict.</li>
+<li><strong>number_re</strong> &#8211; regular expression object to identify numbers.</li>
+<li><strong>dummysequence</strong> &#8211; just a small but complete sentence in the langage.
+Filled from g_langsupport dict.</li>
+<li><strong>replurlexp</strong> &#8211; regular expression subtitution string for URLs.</li>
+<li><strong>replemailexp</strong> &#8211; regular expression subtitution string for emails.</li>
+<li><strong>replipexp</strong> &#8211; regular expression subtitution string for IP addresses.</li>
+<li><strong>repldnsexp</strong> &#8211; regular expression subtitution string for DNS names.</li>
+<li><strong>tagpopen</strong> &#8211; TreeTagger process control tool.</li>
+<li><strong>taginput</strong> &#8211; pipe to write to TreeTagger input. Set whe opening pipe.</li>
+<li><strong>tagoutput</strong> &#8211; pipe to read from TreeTagger input. Set whe opening
+pipe.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="treetaggerwrapper.TreeTagger.PreparePart">
+<tt class="descname">PreparePart</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TreeTagger.PreparePart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare a basic text.</p>
+<p>Prepare non-SGML text parts.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> (<em>unicode</em>) &#8211; unicode text of part to process.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of lines to process as TreeTagger input.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">[ unicode ]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="treetaggerwrapper.TreeTagger.PrepareText">
+<tt class="descname">PrepareText</tt><big>(</big><em>text</em>, <em>tagblanks</em>, <em>numlines</em>, <em>notagurl</em>, <em>notagemail</em>, <em>notagip</em>, <em>notagdns</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TreeTagger.PrepareText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare a text for processing by TreeTagger.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>text</strong> (<em>unicode   /   [ unicode ]</em>) &#8211; the text to split into base elements.</li>
+<li><strong>tagblanks</strong> (<em>boolean</em>) &#8211; transform blanks chars into SGML tags.</li>
+<li><strong>numlines</strong> (<em>boolean</em>) &#8211; indicator to pur tag for line numbering.</li>
+<li><strong>notagurl</strong> (<em>boolean</em>) &#8211; indicator to not do URL replacement (default to False).</li>
+<li><strong>notagemail</strong> (<em>boolean</em>) &#8211; indicator to not do email address replacement
+(default to False).</li>
+<li><strong>notagip</strong> (<em>boolean</em>) &#8211; indicator to not do IP address replacement (default
+to False).</li>
+<li><strong>notagdns</strong> (<em>boolean</em>) &#8211; indicator to not do DNS names replacement (default
+to False).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">List of lines to process as TreeTagger input (no n at end of line).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">[ unicode ]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="treetaggerwrapper.TreeTagger.SetLangage">
+<tt class="descname">SetLangage</tt><big>(</big><em>kargs</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TreeTagger.SetLangage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set langage for tagger.</p>
+<p>Internal use.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="treetaggerwrapper.TreeTagger.SetPreprocessor">
+<tt class="descname">SetPreprocessor</tt><big>(</big><em>kargs</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TreeTagger.SetPreprocessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set preprocessing files, and options.</p>
+<p>Internal use.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="treetaggerwrapper.TreeTagger.SetTagger">
+<tt class="descname">SetTagger</tt><big>(</big><em>kargs</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TreeTagger.SetTagger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set tagger paths, files, and options.</p>
+<p>Internal use.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="treetaggerwrapper.TreeTagger.StartProcess">
+<tt class="descname">StartProcess</tt><big>(</big><big>)</big><a class="headerlink" href="#treetaggerwrapper.TreeTagger.StartProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start TreeTagger processing chain.</p>
+<p>Internal use.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="treetaggerwrapper.TreeTagger.TagText">
+<tt class="descname">TagText</tt><big>(</big><em>text</em>, <em>numlines=False</em>, <em>tagonly=False</em>, <em>prepronly=False</em>, <em>tagblanks=False</em>, <em>notagurl=False</em>, <em>notagemail=False</em>, <em>notagip=False</em>, <em>notagdns=False</em>, <em>encoding=None</em>, <em>errors='strict'</em><big>)</big><a class="headerlink" href="#treetaggerwrapper.TreeTagger.TagText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tag a text and return corresponding lines.</p>
+<p>This is normally the method you use on this class. Other methods
+are only helpers of this one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>text</strong> (<em>string   /   [ string ]</em>) &#8211; the text to tag.</li>
+<li><strong>numlines</strong> (<em>boolean</em>) &#8211; indicator to keep line numbering information in
+data flow (done via SGML tags) (default to False).</li>
+<li><strong>tagonly</strong> (<em>boolesn</em>) &#8211; indicator to only do TreeTagger tagging processing
+on input (default to False).</li>
+<li><strong>prepronly</strong> (<em>boolean</em>) &#8211; indicator to only do preprocessing of text without
+tagging (default to False).</li>
+<li><strong>tagblanks</strong> (<em>boolean</em>) &#8211; indicator to keep blanks characters information in
+data flow (done via SGML tags) (default to False).</li>
+<li><strong>notagurl</strong> (<em>boolean</em>) &#8211; indicator to not do URL replacement (default to False).</li>
+<li><strong>notagemail</strong> (<em>boolean</em>) &#8211; indicator to not do email address replacement
+(default to False).</li>
+<li><strong>notagip</strong> (<em>boolean</em>) &#8211; indicator to not do IP address replacement (default
+to False).</li>
+<li><strong>notagdns</strong> (<em>boolean</em>) &#8211; indicator to not do DNS names replacement (default
+to False).</li>
+<li><strong>encoding</strong> (<em>C{str}</em>) &#8211; encoding of input data (default to latin1 for C{str}
+text and unicode for C{unicode} text), usable values
+are standard encodings + C{&#8220;unicode&#8221;} and C{unicode}
+type.
+Mandatory if text is a C{list} or C{tuple} of
+strings.</li>
+<li><strong>errors</strong> (<em>C{str}</em>) &#8211; indicator how to manage encoding/decoding errors for
+your data, can be strict / replace / ignore (default
+to strict).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">List of output lines from the tagger, unicode or str
+strings.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">[ string ]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">treetaggerwrapper module</a><ul>
+<li><a class="reference internal" href="#treetaggerwrapper-python-wrapper-for-treetagger"><tt class="docutils literal"><span class="pre">treetaggerwrapper</span></tt> &#8211; Python wrapper for TreeTagger</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#processing">Processing</a><ul>
+<li><a class="reference internal" href="#encoding">Encoding</a></li>
+<li><a class="reference internal" href="#this-module-does-two-main-things">This module does two main things</a></li>
+<li><a class="reference internal" href="#other-things-done-by-this-module">Other things done by this module</a></li>
+<li><a class="reference internal" href="#module-globals-and-constants">Module globals and constants</a></li>
+<li><a class="reference internal" href="#module-exceptions-class-and-functions">Module exceptions, class and functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/treetaggerwrapper.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">reco-ao 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, François Royer et Valentin Lhommeau.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
