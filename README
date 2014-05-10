@@ -46,7 +46,7 @@ IDE : eclipse + PyDev + Egit
 BASE DE DONNEES :
 Nous ne fournissons le dump de la base de données complète car le fichier résultant dépasse les
 20 Mo, taille maximale autorisé par Madoc.
-Cependant, le fichier test.sql fournit le script qui crée la structure des tables et applique les contraintes d'intégrité.
+Cependant, le fichier 'test.sql' fournit le script qui crée la structure des tables et applique les contraintes d'intégrité.
 
 FICHIERS :
 - LES FICHIERS SOURCES DU PROJETS
