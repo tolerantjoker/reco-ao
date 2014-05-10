@@ -1,0 +1,73 @@
+PROJET "FILTRAGE COLLABORATIF ET RECOMMANDATION D'APPELS D'OFFRES"
+
+ENTREPRISE : Jurismarchés
+TUTEUR ENTREPRISE : Frédérique OLIVEAU
+INTERLOCUTEURS TECHNIQUES ENTREPRISE : Florian PAQUET, Alexandre GAREL
+TUTEUR PEDAGOGIQUE : Guillaume RASCHIA
+COORDINATEUR : Marc GELGON
+ETUDIANTS : François ROYER & Valentin LHOMMEAU
+
+
+##############################################################################################
+PROJET :
+Ce projet s'inscrit dans un cadre de recherche et consiste à mettre en place un système de recommandation
+pour des appels d'offres de marché public.
+Le contenu de cette archive ne présente donc pas une application entièrement aboutie,
+mais bien le résultat de la mise en place d'un algorithme de recommandation dont les détails
+dont les détails de fonctionnement figure dans le rapport au format PDF.
+
+IMPORTANT :
+Ce projet sera repris par l'étudiant Gourav
+###############################################################################################
+
+
+RESUME :
+Système de recommandation expérimentale pour des appels d'offres.
+L'algorithme se base sur du calcul matriciel : extraction de bag-of-words et génération de topics (Non Negative Matrix Factorization).
+Un calcul de similarité permet de découvrir les appels d'offres à recommander à chaque client.
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+EXECUTION :
+L'exécution de ce programme peut être très longue (> 5 heures).
+Les opérations de taggages des mots lors du preprocessing et les opérations d’extraction des sacs de mots et les opérations de génération des topics sont en effet très chronophages.
+
+ASTUCE :
+Vous pouvez copier-coller le contenu d'un des dossier (reco21, reco22, reco23, reco24, reco25) dans le dossier principale,
+pour observer le résultat d'une recommandation.
+
+SORTIE
+La sortie standard affichera pour chaque client:
+- les identifiants des appels d'offres recommandés
+- les indicateur precision/recall correspondants
+------------------------------------------------------------------------------------------------------------------------------------------------
+LANGAGE: Python 2.7
+BIBILIOTHEQUE Python : Scikit-learn, nltk
+IDE : eclipse + PyDev + Egit 
+
+BASE DE DONNEES :
+Nous ne fournissons le dump de la base de données avec toutes les données car le fichier résultant dépasse les
+20 Mo, taille maximale autorisé par Madoc.
+
+FICHIERS :
+- LES FICHIERS SOURCES DU PROJETS
+	- analyzer.py
+	- announce.py
+	- client.py
+	- config.py
+	- db_config.py
+	- db_entity.py
+	- import_sql.py
+	- reco_system.py
+	- main.py
+	
+	CLASSE REUTILISEE
+	- treetaggerwrapper.py
+
+- DES FICHIERS BINAIRES DE SAUVEGARDES (extension '.save')
+	- reco21/
+	- reco22/
+	- reco23/
+	- reco24/
+	- reco25/
+	
+- LA DOCUMENTATION AU FORMAT HTML
+	- docs/
